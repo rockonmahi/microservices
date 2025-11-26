@@ -1,15 +1,3 @@
-server:
-  port: 5102
-
 spring:
-  application:
-    name: registry-service
-
-eureka:
-  instance:
-    hostname: 10.5.10.2
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  profiles:
+    active: cloud

@@ -22,7 +22,6 @@ management:
     tracing:
       endpoint: "http://172.51.1.20:9411/api/v2/spans"
 
-
 spring:
   security:
     saml2:
