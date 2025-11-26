@@ -1,0 +1,11 @@
+server:
+  port: 5103
+spring:
+  profiles:
+    active: native
+  application:
+    name: config-server
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:5102/eureka/

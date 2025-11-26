@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.escola.userservice.entity.User;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -20,6 +23,8 @@ public class UserController {
 
     @PostMapping("/login")
     public UserLoginDto userDetails(@RequestBody UserLoginForm userLogin) {
+        Source schemaFile = new StreamSource(getClass().getResourceAsStream("schema/order_impex.xsd"));
+
         return userService.getUserDetails(userLogin);
     }
 }

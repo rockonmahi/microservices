@@ -1,3 +1,5 @@
 spring:
-  profiles:
-    active: cloud
+  application:
+    name: authentication-server
+  config:
+    import: "optional:configserver:http://10.5.10.3:5103"

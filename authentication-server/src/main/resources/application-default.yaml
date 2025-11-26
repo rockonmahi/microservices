@@ -2,14 +2,19 @@ server:
   port: 5105
 
 spring:
+  application:
+    name: authentication-server
+  cloud:
+    config:
+      enabled: false
   data:
     mongodb:
-      uri: "mongodb://10.5.10.13:27017/login"
+      uri: "mongodb://localhost:27017/login"
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://10.5.10.2:5102/eureka/
+      defaultZone: http://localhost:5102/eureka/
 
 management:
   tracing:
@@ -17,7 +22,7 @@ management:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: "http://10.5.10.20:9411/api/v2/spans"
+      endpoint: "http://localhost:9411/api/v2/spans"
 
 logging:
   level:

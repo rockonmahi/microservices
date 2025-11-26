@@ -1,9 +1,8 @@
+/*
 
 package com.escola.authserver.service;
 
 import com.escola.authserver.dto.UserLoginDto;
-import com.escola.authserver.entity.User;
-import com.escola.authserver.entity.UserDetails;
 import com.escola.authserver.form.UserLoginForm;
 import com.escola.authserver.repository.UserDetailsRepository;
 import com.escola.authserver.repository.UserRepository;
@@ -27,8 +26,8 @@ public class UserServiceImpl implements UserService {
 	private UserDetailsRepository userDetailsRepository;
 
 	@Override
-	public String saveLoginUser() {
-
+	public String saveLoginUser() {*/
+/*
 		User user = new User();
 		user.setUserName("rockonmahi");
 		user.setFullName("Mahendra Pratap");
@@ -50,6 +49,9 @@ public class UserServiceImpl implements UserService {
 		userDetailsRepository.save(userDetails);
 
 		return user.getUserId();
+		*//*
+
+		return null;
 	}
 
 	@Override
@@ -73,3 +75,4 @@ public class UserServiceImpl implements UserService {
 		return userLoginDto;
 	}
 }
+*/
