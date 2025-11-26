@@ -88,7 +88,7 @@ services:
     networks:
       vpcjava:
         ipv4_address: 172.51.1.8
-
+        
   mysql57:
     container_name: mysql57
     image: mysql:5.7
@@ -121,6 +121,22 @@ services:
     networks:
       vpcjava:
         ipv4_address: 172.51.1.12
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:6
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongouser
+      MONGO_INITDB_ROOT_PASSWORD: mongopass
+      MONGO_INITDB_DATABASE: login
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db/mongodb/data:/data/db
+    networks:
+      vpcjava:
+        ipv4_address: 172.51.1.13
 
   zipkin:
     container_name: zipkin
