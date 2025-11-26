@@ -1,5 +1,5 @@
 server:
-  port: 5117
+  port: 6117
 
 spring:
   application:
@@ -35,7 +35,7 @@ logging:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:5102/eureka/
+      defaultZone: http://localhost:6102/eureka/
 
 management:
   tracing:

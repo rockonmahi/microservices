@@ -1,5 +1,5 @@
 server:
-  port: 5112
+  port: 6112
 
 spring:
   application:

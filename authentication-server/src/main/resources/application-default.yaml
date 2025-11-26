@@ -1,5 +1,5 @@
 server:
-  port: 5115
+  port: 6115
 
 spring:
   application:
@@ -9,12 +9,12 @@ spring:
       enabled: false
   data:
     mongodb:
-      uri: "mongodb://localhost:27017/login"
+      uri: "mongodb://mongouser:mongopass@localhost:27017/login"
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:5112/eureka/
+      defaultZone: http://localhost:6112/eureka/
 
 management:
   tracing:
