@@ -1,15 +1,15 @@
 server:
-  port: 5105
+  port: 5115
 
 spring:
   data:
     mongodb:
-      uri: "mongodb://10.5.10.13:27017/login"
+      uri: "mongodb://172.51.1.13:27017/login"
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://10.5.10.2:5102/eureka/
+      defaultZone: http://172.51.1.2:5112/eureka/
 
 management:
   tracing:
@@ -17,7 +17,7 @@ management:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: "http://10.5.10.20:9411/api/v2/spans"
+      endpoint: "http://172.51.1.20:9411/api/v2/spans"
 
 logging:
   level:

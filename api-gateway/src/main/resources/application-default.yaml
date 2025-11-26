@@ -1,9 +1,9 @@
 server:
-  port: 5104
+  port: 5113
 eureka:
   client:
     serviceUrl:
-      defaultZone: "http://localhost:5102/eureka/"
+      defaultZone: "http://localhost:5112/eureka/"
 management:
   tracing:
     sampling:
