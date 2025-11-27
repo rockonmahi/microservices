@@ -1,0 +1,81 @@
+services:
+
+  mysql57:
+    container_name: mysql57
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+      MYSQL_ROOT_PASSWORD: java1234
+      MYSQL_DATABASE: practice
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/mysql/sql:/docker-entrypoint-initdb.d
+    networks:
+      vpcjava:
+        ipv4_address: 172.51.1.11
+
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/postgresql:/var/lib/postgresql/data
+    networks:
+      vpcjava:
+        ipv4_address: 172.51.1.12
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:6
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongouser
+      MONGO_INITDB_ROOT_PASSWORD: mongopass
+      MONGO_INITDB_DATABASE: login
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db/mongodb/data:/data/db
+    networks:
+      vpcjava:
+        ipv4_address: 172.51.1.13
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      vpcjava:
+        ipv4_address: 172.51.1.20
+
+  nginx:
+    container_name: web-server
+    build:
+      context: ./web-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      vpcjava:
+        ipv4_address: 172.51.1.21
+
+networks:
+  vpcjava:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.51.0.0/16
+          gateway: 172.51.0.1
+
+volumes:
+  db:

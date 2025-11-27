@@ -8,7 +8,7 @@ import java.util.UUID;
 @Getter
 @Builder
 public class User {
-    private final UUID id;
+    private final String id;
     private final String userName;
     private final String password;
     private final String fullName;

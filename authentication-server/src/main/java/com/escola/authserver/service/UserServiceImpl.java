@@ -52,15 +52,14 @@ public class UserServiceImpl implements UserService {
 
 		userDetailsRepository.save(userDetails);
 
-		return user.getId().toString();
+		return user.getId();
 	}
 
 	@Override
 	public UserLoginDto getUserDetails(UserLoginForm userLogin) {
-
-		List<User> userList = userRepository.findByUserNameAndAccountLock(userLogin.getUsername(),1);
+		List<User> userList = userRepository.findByUserNameAndAccountLock(userLogin.getUsername(),0);
 		UserLoginDto userLoginDto= new UserLoginDto();
-		List<String> authorities= Arrays.asList("Admin");
+		List<String> authorities= Arrays.asList("openid","email","phone");
 		if (userList.isEmpty()) {
 			String userId = saveLoginUser();
 			User user = userRepository.findById(userId).get();

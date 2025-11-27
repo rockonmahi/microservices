@@ -29,8 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         UserLoginDto userLoginDto = userService.getUserDetails(new UserLoginForm(username));
 
-        List<GrantedAuthority> authorities = userLoginDto.getAuthorities().stream().map(authority -> new
-                SimpleGrantedAuthority(authority)).collect(Collectors.toList());
+        List<GrantedAuthority> authorities = userLoginDto.getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         return new User(userLoginDto.getUsername(), userLoginDto.getPassword(), authorities);
     }
 }
