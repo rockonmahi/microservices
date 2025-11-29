@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.save(user);
 
-		List<Users> loginUserList = userRepository.findByUserNameAndAccountLock(user.getUserName(),1);
+		List<Users> loginUserList = userRepository.findByUserNameAndAccountLock(user.getUserName(),0);
 		if (!loginUserList.isEmpty()) {
 			user = loginUserList.get(0);
 		}
