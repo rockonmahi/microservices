@@ -76,8 +76,6 @@ services:
       vpcjava:
         ipv4_address: 172.51.1.7
 
-
-
 networks:
   vpcjava:
     driver: bridge

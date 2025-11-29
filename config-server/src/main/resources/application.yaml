@@ -1,12 +1,10 @@
 server:
   port: 5113
-
 spring:
   profiles:
     active: native
   application:
     name: config-server
-
 eureka:
   client:
     serviceUrl:
