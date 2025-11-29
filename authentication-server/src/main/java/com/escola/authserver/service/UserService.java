@@ -6,8 +6,8 @@ import com.escola.authserver.form.UserLoginForm;
 
 public interface UserService {
 
-	public String saveLoginUser();
+	String saveLoginUser();
 
-	public UserLoginDto getUserDetails(UserLoginForm userLogin);
+	UserLoginDto getUserDetails(UserLoginForm userLogin);
 
 }

@@ -50,10 +50,10 @@ services:
       vpcjava:
         ipv4_address: 172.51.1.5
 
-  resource-server:
-    container_name: resource-server
+  user-service:
+    container_name: user-service
     build:
-      context: ./resource-server
+      context: ./user-service
     restart: unless-stopped
     ports:
       - "5116:5116"
@@ -76,18 +76,7 @@ services:
       vpcjava:
         ipv4_address: 172.51.1.7
 
-  user-service:
-    container_name: user-service
-    build:
-      context: ./user-service
-    restart: unless-stopped
-    ports:
-      - "5118:5118"
-    depends_on:
-      - config-server
-    networks:
-      vpcjava:
-        ipv4_address: 172.51.1.8
+
 
 networks:
   vpcjava:

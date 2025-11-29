@@ -1,13 +1,16 @@
 package com.escola.userservice.controller;
 
+
 import com.escola.userservice.dto.UserLoginDto;
 import com.escola.userservice.form.UserLoginForm;
 import com.escola.userservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.escola.userservice.entity.User;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;

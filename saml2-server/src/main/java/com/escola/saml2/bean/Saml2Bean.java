@@ -71,7 +71,7 @@ public class Saml2Bean {
                     .filter(attr -> "groups".equalsIgnoreCase(attr.getName()))
                     .map(Attribute::getAttributeValues)
                     .flatMap(Collection::stream)
-                    .map(xml -> new SimpleGrantedAuthority("ROLE_" + xml.getDOM().getTextContent()))
+                    .map(xml -> new SimpleGrantedAuthority(xml.getDOM().getTextContent()))
                     .toList();
             return userRoles;
         };

@@ -2,11 +2,11 @@
 package com.escola.authserver.service;
 
 import com.escola.authserver.dto.UserLoginDto;
-import com.escola.authserver.entity.User;
 import com.escola.authserver.entity.UserDetails;
+import com.escola.authserver.entity.Users;
 import com.escola.authserver.form.UserLoginForm;
-import com.escola.authserver.repository.UserDetailsRepository;
 import com.escola.authserver.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,59 +15,55 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private UserDetailsRepository userDetailsRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public String saveLoginUser() {
-		User user = User.builder()
+
+
+		UserDetails userDetails = UserDetails.builder()
+				.firstName("Mahendra")
+				.middleName("Pratap")
+				.lastName("Singh")
+				.build();
+
+		Users user = Users.builder()
                 .userName("rockonmahi")
                 .fullName("Mahendra Pratap")
                 .password(passwordEncoder.encode("test"))
                 .active(1)
                 .accountLock(0)
+				.userDetails(userDetails)
                 .build();
 
 		userRepository.save(user);
 
-		List<User> loginUserList = userRepository.findByUserNameAndAccountLock(user.getUserName(),1);
+		List<Users> loginUserList = userRepository.findByUserNameAndAccountLock(user.getUserName(),1);
 		if (!loginUserList.isEmpty()) {
 			user = loginUserList.get(0);
 		}
-
-		UserDetails userDetails = UserDetails.builder()
-                .firstName("Mahendra")
-                .middleName("Pratap")
-                .lastName("Singh")
-                .user(user)
-                .build();
-
-		userDetailsRepository.save(userDetails);
 
 		return user.getId();
 	}
 
 	@Override
 	public UserLoginDto getUserDetails(UserLoginForm userLogin) {
-		List<User> userList = userRepository.findByUserNameAndAccountLock(userLogin.getUsername(),0);
+		List<Users> userList = userRepository.findByUserNameAndAccountLock(userLogin.getUsername(),0);
 		UserLoginDto userLoginDto= new UserLoginDto();
 		List<String> authorities= Arrays.asList("openid","email","phone");
 		if (userList.isEmpty()) {
 			String userId = saveLoginUser();
-			User user = userRepository.findById(userId).get();
+			Users user = userRepository.findById(userId).get();
 			userLoginDto.setUsername(user.getUserName());
 			userLoginDto.setPassword(user.getPassword());
 			userLoginDto.setAuthorities(authorities);
 		}else{
-			User user=userList.get(0);
+			Users user=userList.get(0);
 			userLoginDto.setUsername(user.getUserName());
 			userLoginDto.setPassword(user.getPassword());
 			userLoginDto.setAuthorities(authorities);

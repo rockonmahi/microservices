@@ -1,3 +1,3 @@
 FROM amazoncorretto:17-alpine-jdk
-COPY target/user-service-1.jar user-service.jar
-ENTRYPOINT ["java","-jar","/user-service.jar"]
+COPY target/resource-server-1.jar  resource-server.jar
+ENTRYPOINT ["java","-jar","/resource-server.jar"]

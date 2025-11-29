@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abel&display=swap');
+
+
+*{margin:0; padding:0; outline:0;}
+body{font:400 16px/24px 'Roboto Condensed', sans-serif;}
+/*CUSTOM CODE START*/
+
+.fs-12{font-size:12px;}
+.fs-13{font-size:13px;}
+.fs-14{font-size:14px;}
+.fs-32{font-size:32px;}
+
+
+.fw300{font-weight:300;}
+.fw400{font-weight:400;}
+.fw700{font-weight:700;}
+
+
+.cp{cursor:pointer;}
+
+
+.text-warning{color:#e46226!important;}
+
+.width-100{width: 100px!important;}
+.fontFamilyAvil{font-family: 'Abel', sans-serif;}
+/*CUSTOM CODE END*/
+
+/*HEADER START*/
+header{background:#fff; min-height:50px; position:sticky; top:0; z-index:999; box-shadow:0 1px 3px 0 #d4d4d4; }
+header .nav-link{font-weight:700; font-size:16px; color:#13096e; padding:3px 12px!important; text-transform: uppercase; display: flex; align-items: center;}
+header .nav-link:hover,header .nav-link.active{color:#0d6efd;}
+header .nav-link span{margin-right: 10px; margin-top: -4px;}
+header .nav-item:hover{margin-top:-3px; transition:margin-top 0.3s ease;}
+header .dropdown img{width: 40px; height: 40px;}
+header .dropdown-menu{padding: 0;}
+header .dropdown-menu li{border-bottom:1px solid #d9d9d9}
+header .dropdown-menu li a{font-size:15px; display:flex; padding:10px;}
+header .dropdown-menu li a i{font-size:15px; margin-right:10px; color:#0d6efd;}
+header .signOut span {background: #fff; position: absolute; top: -8px; z-index:-1; right: 40px; border: 1px solid;
+    border-color: #e6e5e5 transparent transparent #e6e5e5; width: 15px; height: 15px; transform: rotate(45deg);}
+/*HEADER END*/
+
+/*ALL CODE START*/
+.mainContainer{background:#f6f7fb; width:100%; display:block; margin-bottom:300px;}
+
+.samradhiSlider .carousel-inner{height: calc(100vh - 135px );}
+.samradhiSlider .carousel-inner img{height: calc(100vh);}
+
+.Samradhi_Business .card{box-shadow: 2px 3px 5px #ccc;}
+.Samradhi_Business .card-img-top{height: 280px;}
+.Samradhi_Business .card-title{font-size: 20px; text-transform: uppercase; font-weight: 700; color:#0d6efd;}
+
+.innertop img{width: 100%; height: 300px; object-fit: cover;}
+.innertop span{position: absolute; left: 0; top: 0; width: 100%; height: 100%; background:rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;}
+
+.borderctrl{border-right: 2px solid #e5e5e5;}
+
+.lines {position: absolute;top: 0;left: 0; right: 0; height: 100%; margin: auto; width: 100%; z-index: -1;}
+.lines .line {position: absolute; width: 1px;height: 100%;top: 0;left: 50%;background: rgba(150, 147, 147, 0.1); overflow: hidden;}
+.lines .line:nth-child(1) {margin-left: -25%;}
+.lines .line:nth-child(3) {margin-left: 25%;}
+.lines .line:nth-child(1)::after {-webkit-animation-delay: 2s; animation-delay: 2s;}
+.lines .line:nth-child(3)::after {-webkit-animation-delay: 2.5s; animation-delay: 2.5s;}
+.lines .line::after {content: ""; display: block; position: absolute; height: 15vh; width: 100%; top: -50%; left: 0;
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), color-stop(75%, #ffffff), to(#ffffff)); background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 75%, #ffffff 100%);
+    -webkit-animation: run 3s 0s infinite;animation: run 3s 0s infinite; -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards; -webkit-animation-timing-function: cubic-bezier(0.4, 0.26, 0, 0.97);
+    animation-timing-function: cubic-bezier(0.4, 0.26, 0, 0.97);}
+	
+@keyframes run { 0%   {top:-50%;}  100% {top:100%;} }
+
+/*OUR-TEAM START*/
+.ourTeams{display: flex; flex-flow: row wrap; justify-content: space-between;}
+.productOne {position: relative; flex: 1 1 30%; z-index: 1; padding: 20px 25px 30px; margin: 10px; text-align: center; border-radius: 5px; background-color: #ffffff; margin-bottom: 30px;  -webkit-box-shadow: -1px 3px 20px 0px rgba(82, 90, 101, 0.1); -moz-box-shadow: -1px 3px 20px 0px rgba(82, 90, 101, 0.1); box-shadow: -1px 3px 20px 0px rgba(82, 90, 101, 0.1); -webkit-transition: all 400ms ease-out; transition: all 400ms ease-out; will-change: transform;}
+.productOne h3{font-size:30px; margin:1rem 0 0; color: #0d6efd; text-transform: uppercase;}
+.productOne h4{font-size:15px; margin:5px 0 10px; color: #333;}
+.productOne p{margin:1.5rem 0 0; color: #747474; text-align: left;}
+.productOne:hover {-webkit-transform: translateY(-10px); transform: translateY(-10px);}
+
+.productOne .services-icon{width:180px; height:180px; position:relative; margin:auto; border-radius:100%; display: flex; justify-content: center; align-items: center;}
+.productOne .services-icon::before {content: ''; position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: #d7daf5; z-index: -1; border-radius: 50%; margin: 5px; -webkit-transition: 0.5s; transition: 0.5s;}
+.productOne .services-icon img{width: 180px; height: 180px; border-radius: 75%; padding: 10px;}
+.productOne:hover .services-icon::before {background: #0d6efd;}
+.productOne:hover:before {transform: scaleX(1);}
+.productOne:before {position: absolute; content: ""; left: 0; right: 0; bottom: 0; min-width: 100%; border-bottom: 3px solid #0d6efd; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; transform: scaleX(0); -webkit-transition: all 400ms ease-out; transition: all 400ms ease-out; will-change: transform;}
+/*OUR-TEAM END*/
+
+.imageGallery .img-thumbnail{ height: 200px; width: 100%; object-fit:fill;}
+.imageGallery a{ color: #141414; font-family: 'Abel', sans-serif; text-decoration: none; font-size: 17px; letter-spacing:1px; font-weight: 700;}
+
+/*ALL CODE END*/
+
+
+/*FOOTER START*/
+footer{background:#09005c; font-size:15px; position:fixed; bottom:0; width:100%; height:320px;  box-shadow:1px -1px 3px 0 #d4d4d4; z-index:-1; color:#fff;}
+footer .nav-link{color: #fff; padding: 2px; display: flex; align-items: center;}
+footer .nav-link span{margin-right: 10px;}
+footer .nav-link:hover{color: #ccc;}
+/*FOOTER END*/
+
+@media only screen and (max-width:1200px){
+    header .navbar-collapse .navbar-nav{background: #f7f7f7; margin-top: 10px; padding: 10px; border-radius: 10px;}
+    .mainContainer{margin-bottom:350px;}
+    .productOne {position: relative; flex: 1 1 40%;}
+    header .nav-link{padding: 0 0 0 9px!important;}
+    footer{height: auto;}
+
+}
+
+@media only screen and (max-width:992px){
+    header .navbar-collapse .navbar-nav{background: #f7f7f7; margin-top: 10px; padding: 10px; border-radius: 10px;}
+    .mainContainer{margin-bottom:350px;}
+    .productOne {position: relative; flex: 1 1 100%;}
+    footer{height: auto;}
+
+}
+
+@media only screen and (max-width:768px){   
+
+    footer{height: auto; text-align: center;}
+    footer .nav.flex-md-column{justify-content: center;}
+    footer .nav.flex-md-column a{border-right:1px solid; padding:0 10px;}
+    footer .nav.flex-md-column a:last-child{border-right:0;}
+    .mainContainer{margin-bottom:420px;}
+    .samradhiSlider .carousel-inner{height: 300px}
+    .samradhiSlider .carousel-inner img{height: 300px; object-fit: cover;}
+    .innertop img{height: auto; max-height: 200px;}
+    .reverse{flex-direction: column-reverse;}
+    .borderctrl{border-bottom: 2px solid #e5e5e5; border-right: 0; padding-bottom: 50px;}
+}
