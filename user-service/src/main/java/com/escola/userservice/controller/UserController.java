@@ -18,8 +18,6 @@ import javax.xml.transform.stream.StreamSource;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    private static final Logger LOGGER
-            = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
