@@ -76,6 +76,19 @@ services:
       vpcjava:
         ipv4_address: 172.51.1.7
 
+  event-service:
+    container_name: event-service
+    build:
+      context: ./event-service
+    restart: unless-stopped
+    ports:
+      - "5118:5118"
+    depends_on:
+      - config-server
+    networks:
+      vpcjava:
+        ipv4_address: 172.51.1.8
+
 networks:
   vpcjava:
     driver: bridge

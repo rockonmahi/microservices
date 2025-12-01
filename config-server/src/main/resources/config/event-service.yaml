@@ -1,0 +1,44 @@
+server:
+  port: 5118
+spring:
+  application:
+    name: event-service
+  cloud:
+    config:
+      enabled: false
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://172.51.1.2:5112/eureka/
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: "http://172.51.1.20:9411/api/v2/spans"
+logging:
+  level:
+    org:
+      springframework:
+        security: "${SPRING_SECURITY_LOG_LEVEL:TRACE}"
+  pattern:
+    console: "${LOGPATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}"
+azure:
+  servicebus:
+    connections:
+      topic:
+        listener:
+          connection:
+          topic:
+          subscriptionName:
+        sender:
+          connection:
+          topic:
+      queue:
+        listener:
+          connection:
+          queue:
+        sender:
+          connection:
+          queue:
