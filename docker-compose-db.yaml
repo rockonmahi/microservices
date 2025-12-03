@@ -16,7 +16,7 @@ services:
       - ./db/mysql/sql:/docker-entrypoint-initdb.d
     networks:
       vpcjava:
-        ipv4_address: 172.51.1.11
+        ipv4_address: 172.51.2.1
 
   postgres:
     container_name: postgres
@@ -31,7 +31,7 @@ services:
       - ./db/postgresql:/var/lib/postgresql/data
     networks:
       vpcjava:
-        ipv4_address: 172.51.1.12
+        ipv4_address: 172.51.2.2
 
   mongodb:
     container_name: mongodb
@@ -47,7 +47,23 @@ services:
       - ./db/mongodb/data:/data/db
     networks:
       vpcjava:
-        ipv4_address: 172.51.1.13
+        ipv4_address: 172.51.2.3
+        
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      xpack.security.enabled: "false"   # Disable security for local/dev
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./db/es/data:/usr/share/elasticsearch/data
+      - ./db/es/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      vpcjava:
+        ipv4_address: 172.51.2.4
 
   zipkin:
     container_name: zipkin
@@ -56,7 +72,7 @@ services:
       - "9411:9411"
     networks:
       vpcjava:
-        ipv4_address: 172.51.1.20
+        ipv4_address: 172.51.3.1
 
   nginx:
     container_name: web-server
@@ -67,7 +83,7 @@ services:
       - "80:80"
     networks:
       vpcjava:
-        ipv4_address: 172.51.1.21
+        ipv4_address: 172.51.4.1
 
 networks:
   vpcjava:
