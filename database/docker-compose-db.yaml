@@ -15,9 +15,8 @@ services:
       - ./db/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./db/mysql/sql:/docker-entrypoint-initdb.d
     networks:
-      escola-network:
-        ipv4_address: 172.52.2.2
-
+      - escola-network
+          #ipv4_address: 172.52.2.2
   postgresdb:
     container_name: postgresdb
     image: postgres:15
@@ -30,9 +29,8 @@ services:
     volumes:
       - ./db/postgresql:/var/lib/postgresql/data
     networks:
-      escola-network:
-        ipv4_address: 172.52.2.3
-
+      - escola-network
+          #ipv4_address: 172.52.2.3
   mongodb:
     container_name: mongodb
     image: mongo:6
@@ -46,9 +44,8 @@ services:
     volumes:
       - ./db/mongodb/data:/data/db
     networks:
-      escola-network:
-        ipv4_address: 172.52.2.4
-        
+      - escola-network
+          #ipv4_address: 172.52.2.4
   elasticsearch:
     container_name: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
@@ -62,25 +59,19 @@ services:
       - ./db/elasticsearch/data:/usr/share/elasticsearch/data
       - ./db/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     networks:
-      escola-network:
-        ipv4_address: 172.52.2.5
-
+      - escola-network
+          #ipv4_address: 172.52.2.5
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
     networks:
-      escola-network:
-        ipv4_address: 172.52.2.11
-        
+      - escola-network
+        #ipv4_address: 172.52.2.11
 networks:
   escola-network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.52.0.0/16
-          gateway: 172.52.0.1
+    external: true
 
 volumes:
   db:

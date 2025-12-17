@@ -8,9 +8,8 @@ services:
     ports:
       - "80:80"
     networks:
-      escola-network:
-        ipv4_address: 172.51.1.11
-
+      - escola-network
+          #ipv4_address: 172.51.1.1
   registry-service:
     container_name: registry-service
     build:
@@ -19,9 +18,8 @@ services:
     ports:
       - "5112:5112"
     networks:
-      escola-network:
-        ipv4_address: 172.51.1.2
-
+      - escola-network
+          #ipv4_address: 172.51.1.2
   config-server:
     container_name: config-server
     build:
@@ -32,9 +30,8 @@ services:
     depends_on:
       - registry-service
     networks:
-      escola-network:
-        ipv4_address: 172.51.1.3
-
+      - escola-network
+          #ipv4_address: 172.51.1.3
   api-gateway:
     container_name: api-gateway
     build:
@@ -45,9 +42,8 @@ services:
     depends_on:
       - config-server
     networks:
-      escola-network:
-        ipv4_address: 172.51.1.4
-
+      - escola-network
+          #ipv4_address: 172.51.1.4
   authentication-server:
     container_name: authentication-server
     build:
@@ -58,9 +54,8 @@ services:
     depends_on:
       - config-server
     networks:
-      escola-network:
-        ipv4_address: 172.51.1.5
-
+      - escola-network
+          #ipv4_address: 172.51.1.5
   user-service:
     container_name: user-service
     build:
@@ -71,9 +66,8 @@ services:
     depends_on:
       - config-server
     networks:
-      escola-network:
-        ipv4_address: 172.51.1.6
-
+      - escola-network
+          #ipv4_address: 172.51.1.6
   saml2-server:
     container_name: saml2-server
     build:
@@ -84,9 +78,8 @@ services:
     depends_on:
       - config-server
     networks:
-      escola-network:
-        ipv4_address: 172.51.1.7
-
+      - escola-network
+          #ipv4_address: 172.51.1.7
   event-service:
     container_name: event-service
     build:
@@ -97,13 +90,8 @@ services:
     depends_on:
       - config-server
     networks:
-      escola-network:
-        ipv4_address: 172.51.1.8
-        
+      - escola-network
+          #ipv4_address: 172.51.1.8
 networks:
   escola-network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.51.0.0/16
-          gateway: 172.51.0.1
+    external: true
