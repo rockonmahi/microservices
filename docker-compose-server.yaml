@@ -1,5 +1,16 @@
 services:
 
+  nginx:
+    container_name: web-server
+    build:
+      context: ./web-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      escola-network:
+        ipv4_address: 172.51.1.11
+
   registry-service:
     container_name: registry-service
     build:
@@ -8,7 +19,7 @@ services:
     ports:
       - "5112:5112"
     networks:
-      vpcjava:
+      escola-network:
         ipv4_address: 172.51.1.2
 
   config-server:
@@ -21,7 +32,7 @@ services:
     depends_on:
       - registry-service
     networks:
-      vpcjava:
+      escola-network:
         ipv4_address: 172.51.1.3
 
   api-gateway:
@@ -34,7 +45,7 @@ services:
     depends_on:
       - config-server
     networks:
-      vpcjava:
+      escola-network:
         ipv4_address: 172.51.1.4
 
   authentication-server:
@@ -47,7 +58,7 @@ services:
     depends_on:
       - config-server
     networks:
-      vpcjava:
+      escola-network:
         ipv4_address: 172.51.1.5
 
   user-service:
@@ -60,7 +71,7 @@ services:
     depends_on:
       - config-server
     networks:
-      vpcjava:
+      escola-network:
         ipv4_address: 172.51.1.6
 
   saml2-server:
@@ -73,7 +84,7 @@ services:
     depends_on:
       - config-server
     networks:
-      vpcjava:
+      escola-network:
         ipv4_address: 172.51.1.7
 
   event-service:
@@ -86,16 +97,13 @@ services:
     depends_on:
       - config-server
     networks:
-      vpcjava:
+      escola-network:
         ipv4_address: 172.51.1.8
-
+        
 networks:
-  vpcjava:
+  escola-network:
     driver: bridge
     ipam:
       config:
         - subnet: 172.51.0.0/16
           gateway: 172.51.0.1
-
-volumes:
-  db:

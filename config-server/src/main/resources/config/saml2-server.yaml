@@ -1,23 +1,23 @@
 server:
   port: 5117
-logging:
-  level:
-    root: INFO
-    org.springframework.web: TRACE
-    org.springframework.security: TRACE
-    org.springframework.security.saml: TRACE
-    org.opensaml.xmlsec: TRACE
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://172.51.1.2:5112/eureka/
+      defaultZone: "http://registry-service:5112/eureka/"
 management:
   tracing:
     sampling:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: http://172.51.3.1:9411/api/v2/spans
+      endpoint: "http://zipkin:9411/api/v2/spans"
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+  pattern:
+    console: "%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n"
 spring:
   security:
     saml2:

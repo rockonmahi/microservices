@@ -1,7 +1,7 @@
 services:
 
-  mysql57:
-    container_name: mysql57
+  mysqldb:
+    container_name: mysqldb
     image: mysql:5.7
     environment:
       MYSQL_USER: testuser
@@ -15,14 +15,14 @@ services:
       - ./db/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./db/mysql/sql:/docker-entrypoint-initdb.d
     networks:
-      vpcjava:
-        ipv4_address: 172.51.2.1
+      escola-network:
+        ipv4_address: 172.52.2.2
 
-  postgres:
-    container_name: postgres
+  postgresdb:
+    container_name: postgresdb
     image: postgres:15
     environment:
-      POSTGRES_DB: keycloak
+      POSTGRES_DB: practice
       POSTGRES_USER: testuser
       POSTGRES_PASSWORD: testpass
     ports:
@@ -30,8 +30,8 @@ services:
     volumes:
       - ./db/postgresql:/var/lib/postgresql/data
     networks:
-      vpcjava:
-        ipv4_address: 172.51.2.2
+      escola-network:
+        ipv4_address: 172.52.2.3
 
   mongodb:
     container_name: mongodb
@@ -46,8 +46,8 @@ services:
     volumes:
       - ./db/mongodb/data:/data/db
     networks:
-      vpcjava:
-        ipv4_address: 172.51.2.3
+      escola-network:
+        ipv4_address: 172.52.2.4
         
   elasticsearch:
     container_name: elasticsearch
@@ -55,15 +55,15 @@ services:
     environment:
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-      xpack.security.enabled: "false"   # Disable security for local/dev
+      xpack.security.enabled: "false"
     ports:
       - "9200:9200"
     volumes:
-      - ./db/es/data:/usr/share/elasticsearch/data
-      - ./db/es/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./db/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./db/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     networks:
-      vpcjava:
-        ipv4_address: 172.51.2.4
+      escola-network:
+        ipv4_address: 172.52.2.5
 
   zipkin:
     container_name: zipkin
@@ -71,27 +71,16 @@ services:
     ports:
       - "9411:9411"
     networks:
-      vpcjava:
-        ipv4_address: 172.51.3.1
-
-  nginx:
-    container_name: web-server
-    build:
-      context: ./web-server
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    networks:
-      vpcjava:
-        ipv4_address: 172.51.4.1
-
+      escola-network:
+        ipv4_address: 172.52.2.11
+        
 networks:
-  vpcjava:
+  escola-network:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.51.0.0/16
-          gateway: 172.51.0.1
+        - subnet: 172.52.0.0/16
+          gateway: 172.52.0.1
 
 volumes:
   db:

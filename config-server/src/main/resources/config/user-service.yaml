@@ -7,9 +7,9 @@ spring:
     config:
       enabled: false
   datasource:
-    url: jdbc:mysql://172.51.2.1:3306/login
-    username: root
-    password: java1234
+    url: "jdbc:mysql://mysqldb:3306/login"
+    username: "root"
+    password: "java1234"
   jpa:
     show-sql: true
     hibernate:
@@ -21,29 +21,29 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          jwk-set-uri: http://172.51.1.5:5115/oauth2/jwks
+          jwk-set-uri: "http://authentication-server:5115/oauth2/jwks"
         opaque:
-          introspection-uri: http://172.51.1.5:5115/oauth2/introspect
-          introspection-client-id: clientCredentialsReference
-          introspection-client-secret: c1BK9Bg2REeydBbvUoUeKCbD2bvJzXGj
+          introspection-uri: "http://authentication-server:5115/oauth2/introspect"
+          introspection-client-id: "clientCredentialsReference"
+          introspection-client-secret: "c1BK9Bg2REeydBbvUoUeKCbD2bvJzXGj"
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://172.51.1.2:5112/eureka/
+      defaultZone: "http://registry-service:5112/eureka/"
 management:
   tracing:
     sampling:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: http://172.51.3.1:9411/api/v2/spans
-      logging:
-        level:
-          org:
-            springframework:
-              security: TRACE
-        pattern:
-          console: %green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n
+      endpoint: "http://zipkin:9411/api/v2/spans"
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+  pattern:
+    console: "%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n"
 resilience4j:
   circuitbreaker:
     instances:
