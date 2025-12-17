@@ -9,7 +9,7 @@ spring:
       enabled: false
   data:
     mongodb:
-      uri: "mongodb://mongouser:mongopass@localhost:27017/login?authSource=admin"
+      uri: mongodb://mongouser:mongopass@localhost:27017/login?authSource=admin
 
 eureka:
   client:
@@ -22,12 +22,12 @@ management:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
+      endpoint: http://localhost:9411/api/v2/spans
 
 logging:
   level:
     org:
       springframework:
-        security: "${SPRING_SECURITY_LOG_LEVEL:TRACE}"
+        security: TRACE
   pattern:
-    console: "${LOGPATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}"
+    console: %green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n

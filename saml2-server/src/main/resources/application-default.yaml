@@ -1,6 +1,5 @@
 server:
   port: 6117
-
 spring:
   application:
     name: saml2-server
@@ -14,16 +13,14 @@ spring:
           carsonline:
             signing:
               credentials:
-                - private-key-location: "classpath:credentials/private.key"
-                  certificate-location: "classpath:credentials/certificate.crt"
+                - private-key-location: classpath:credentials/private.key
+                  certificate-location: classpath:credentials/certificate.crt
             decryption:
               credentials:
-                - private-key-location: "classpath:credentials/private.key"
-                  certificate-location: "classpath:credentials/certificate.crt"
+                - private-key-location: classpath:credentials/private.key
+                  certificate-location: classpath:credentials/certificate.crt
             assertingparty:
-              metadata-uri: "classpath:okta-metadata.xml"
-
-
+              metadata-uri: classpath:okta-metadata.xml
 logging:
   level:
     root: INFO
@@ -31,16 +28,14 @@ logging:
     org.springframework.security: TRACE
     org.springframework.security.saml: TRACE
     org.opensaml.xmlsec: TRACE
-
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:6112/eureka/
-
 management:
   tracing:
     sampling:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
+      endpoint: http://localhost:9411/api/v2/spans

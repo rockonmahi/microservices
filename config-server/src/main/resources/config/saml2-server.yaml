@@ -17,7 +17,7 @@ management:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: "http://172.51.3.1:9411/api/v2/spans"
+      endpoint: http://172.51.3.1:9411/api/v2/spans
 spring:
   security:
     saml2:
@@ -26,11 +26,11 @@ spring:
           carsonline:
             signing:
               credentials:
-                - private-key-location: "classpath:credentials/private.key"
-                  certificate-location: "classpath:credentials/certificate.crt"
+                - private-key-location: classpath:credentials/private.key
+                  certificate-location: classpath:credentials/certificate.crt
             decryption:
               credentials:
-                - private-key-location: "classpath:credentials/private.key"
-                  certificate-location: "classpath:credentials/certificate.crt"
+                - private-key-location: classpath:credentials/private.key
+                  certificate-location: classpath:credentials/certificate.crt
             assertingparty:
-              metadata-uri: "classpath:okta-metadata.xml"
+              metadata-uri: classpath:okta-metadata.xml
