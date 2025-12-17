@@ -1,6 +1,6 @@
 package com.escola.userservice.config;
 
-import com.escola.userservice.exceptionhandling.CustomAccessDeniedHandler;
+import com.escola.userservice.exception.CustomAccessDeniedHandler;
 import com.escola.userservice.filter.CsrfCookieFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;

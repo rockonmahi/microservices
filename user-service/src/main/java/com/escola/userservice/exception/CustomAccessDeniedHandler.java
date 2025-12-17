@@ -1,4 +1,4 @@
-package com.escola.userservice.exceptionhandling;
+package com.escola.userservice.exception;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
