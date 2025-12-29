@@ -26,30 +26,6 @@ jobs:
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build web-server Image
-        working-directory: ./web-server
-        env:
-          WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_WEB_SERVER_ECR_REPO}}:latest
-        run: |
-          docker build -t $WEB_SERVER_IMAGE_URI .
-          docker push $WEB_SERVER_IMAGE_URI
-
-      - name: Build api-gateway Image
-        working-directory: ./api-gateway
-        env:
-          API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
-        run: |
-          mvn clean install
-          docker build -t $API_GATEWAY_IMAGE_URI .
-          docker push $API_GATEWAY_IMAGE_URI
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -71,3 +47,20 @@ jobs:
         working-directory: ./aws-terraform
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
+
+      - name: Build web-server Image
+        working-directory: ./web-server
+        env:
+          WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_WEB_SERVER_ECR_REPO}}:latest
+        run: |
+          docker build -t $WEB_SERVER_IMAGE_URI .
+          docker push $WEB_SERVER_IMAGE_URI
+
+      - name: Build api-gateway Image
+        working-directory: ./api-gateway
+        env:
+          API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
+        run: |
+          mvn clean install
+          docker build -t $API_GATEWAY_IMAGE_URI .
+          docker push $API_GATEWAY_IMAGE_URI

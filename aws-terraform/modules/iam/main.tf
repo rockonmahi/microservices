@@ -51,6 +51,11 @@ resource "aws_iam_role_policy_attachment" "ecs_deploy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "ecs_admin" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
 resource "aws_iam_role" "ecs_execution_role" {
   name = "ecsExecutionRole"
 
