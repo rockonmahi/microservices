@@ -25,7 +25,8 @@ module "iam" {
 module "ecr" {
   source = "./modules/ecr"
   project_name = var.project_name
-  repo_name = "${var.project_name}-microservice-repo"
+  web_server_repo_name = "${var.project_name}-web-server-repo"
+  api_gateway_repo_name = "${var.project_name}-api-gateway-repo"
 }
 
 module "ecs" {

@@ -16,35 +16,6 @@ jobs:
       - name: Check Out Code
         uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.6.6
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
-
-      - name: Terraform Init
-        working-directory: ./aws-terraform
-        run: terraform init
-
-      - name: Terraform Validate
-        working-directory: ./aws-terraform
-        run: terraform validate
-
-      - name: Terraform Plan
-        working-directory: ./aws-terraform
-        run: terraform plan
-
-      - name: Terraform Apply
-        working-directory: ./aws-terraform
-        if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -71,3 +42,32 @@ jobs:
           mvn clean install
           docker build -t $API_GATEWAY_IMAGE_URI .
           docker push $API_GATEWAY_IMAGE_URI
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform Init
+        working-directory: ./aws-terraform
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: ./aws-terraform
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ./aws-terraform
+        run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: ./aws-terraform
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve
