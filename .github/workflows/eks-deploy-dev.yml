@@ -58,25 +58,16 @@ jobs:
       - name: Build web-server Image
         working-directory: ./web-server
         env:
-          IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.ECR_REPOSITORY}}:${{github.sha}}
+          WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.ECR_REPOSITORY}}:${{github.sha}}
         run: |
-          docker build -t $IMAGE_URI .
-          docker push $IMAGE_URI
+          docker build -t $WEB_SERVER_IMAGE_URI .
+          docker push $WEB_SERVER_IMAGE_URI
 
       - name: Build api-gateway Image
         working-directory: ./api-gateway
         env:
-          IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.ECR_REPOSITORY}}:${{github.sha}}
+          API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.ECR_REPOSITORY}}:${{github.sha}}
         run: |
           mvn clean install
-          docker build -t $IMAGE_URI .
-          docker push $IMAGE_URI
-
-      - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name ${{secrets.EKS_CLUSTER}} --region ${{secrets.AWS_REGION}}
-
-      - name: Deploy to EKS
-        env:
-          IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.${{secrets.AWS_REGION}}.amazonaws.com/${{secrets.ECR_REPOSITORY}}:${{github.sha}}
-        run: |
-          envsubst < k8s/deployment.yaml | kubectl apply -f -
+          docker build -t $API_GATEWAY_IMAGE_URI .
+          docker push $API_GATEWAY_IMAGE_URI
