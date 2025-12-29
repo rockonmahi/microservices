@@ -8,7 +8,7 @@ resource "aws_ecr_repository" "ecr_repository" {
 }
 
 resource "aws_ecrpublic_repository" "ecr_api_gateway_repository" {
-  name = var.api_gateway_repo_name
+  repository_name = var.api_gateway_repo_name
 
   tags = {
     Name = "${var.project_name}-ecr-api-gateway"
