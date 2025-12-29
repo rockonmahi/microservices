@@ -7,7 +7,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   }
 }
 
-resource "aws_ecs_task_definition" "ecs_task_definition" {
+resource "aws_ecs_task_definition" "ecs_web_server_task_definition" {
   family                   = var.service_name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -29,15 +29,15 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   }
 }
 
-resource "aws_ecs_service" "ecs_service" {
+resource "aws_ecs_service" "ecs_service_web_server" {
   name            = "${var.project_name}-${var.service_name}"
   cluster         = aws_ecs_cluster.ecs_cluster.id
-  task_definition = aws_ecs_task_definition.ecs_task_definition.arn
+  task_definition = aws_ecs_task_definition.ecs_web_server_task_definition.arn
   desired_count   = 2
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [var.private_subnets]
+    subnets         = [var.public_subnets]
     security_groups = [var.ecs_sg_id]
   }
 
