@@ -1,3 +1,8 @@
+module "s3" {
+  source = "./modules/s3"
+  s3_bucket_name = "${var.project_name}-${var.s3_bucket_name}"
+}
+
 module "vpc" {
   source = "./modules/vpc"
   project_name = var.project_name

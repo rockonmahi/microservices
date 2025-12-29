@@ -1,9 +1,8 @@
-/*terraform {
+terraform {
   backend "s3" {
-    bucket         = "escola-terraform-state"
-    key            = "eks/terraform.tfstate"
-    region         = "ap-south-1"
-    dynamodb_table = "terraform-locks"
-    encrypt        = true
+    bucket  = "dev-microservice-terraform-state"
+    key     = "eks/terraform.tfstate"
+    region = "ap-south-1"
+    encrypt = true
   }
-}*/
+}
