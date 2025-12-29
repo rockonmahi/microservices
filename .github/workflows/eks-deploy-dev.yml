@@ -68,9 +68,9 @@ jobs:
         env:
           IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.ECR_REPOSITORY}}:${{github.sha}}
         run: |
+          mvn clean install
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
-      
 
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name ${{secrets.EKS_CLUSTER}} --region ${{secrets.AWS_REGION}}
