@@ -29,7 +29,7 @@ module "ecr" {
   api_gateway_repo_name = "${var.project_name}-api-gateway-repo"
 }
 
-/*module "ecs" {
+module "ecs" {
   source        = "./modules/ecs"
   project_name  = var.project_name
   cluster_name = "microservice-ecs-cluster"
@@ -40,7 +40,7 @@ module "ecr" {
   web_server_repository_url     = module.ecr.ecr_web_server_repository
   ecs_execution_role = module.iam.ecs_execution_role
 }
-
+/*
 module "eks" {
   source        = "./modules/eks"
   project_name  = var.project_name
