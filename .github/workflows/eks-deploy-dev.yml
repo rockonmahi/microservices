@@ -1,4 +1,4 @@
-name: Build & Deploy to EKS
+name: Build & Deploy
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
       - name: Build web-server Image
         working-directory: ./web-server
         env:
-          WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.ECR_REPOSITORY}}:${{github.sha}}
+          WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_WEB_SERVER_ECR_REPO}}:latest
         run: |
           docker build -t $WEB_SERVER_IMAGE_URI .
           docker push $WEB_SERVER_IMAGE_URI
@@ -37,7 +37,7 @@ jobs:
       - name: Build api-gateway Image
         working-directory: ./api-gateway
         env:
-          API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.ECR_REPOSITORY}}:${{github.sha}}
+          API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
         run: |
           mvn clean install
           docker build -t $API_GATEWAY_IMAGE_URI .
