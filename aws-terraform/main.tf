@@ -40,7 +40,7 @@ module "ecs" {
   ecs_execution_role = module.iam.ecs_execution_role
 }
 
-module "eks" {
+/*module "eks" {
   source        = "./modules/eks"
   project_name  = var.project_name
   private_subnets_id = [module.vpc.private_subnet_1a_id,module.vpc.private_subnet_1b_id]
@@ -50,4 +50,4 @@ module "eks" {
   eks_worker_node_policy = module.iam.eks_worker_node_policy
   ecr_read = module.iam.ecr_read
   eks_cni_policy = module.iam.eks_cni_policy
-}
+}*/
