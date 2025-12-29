@@ -33,11 +33,11 @@ module "ecs" {
   source        = "./modules/ecs"
   project_name  = var.project_name
   cluster_name = "microservice-ecs-cluster"
-  service_name  = "order-service"
+  service_name  = "web-server"
   private_subnets = module.vpc.private_subnet_1a_id
   ecs_sg_id     = module.security.ecs_sg_id
   target_group  = module.alb.target_group_arn
-  image_url     = module.ecr.repository_url
+  web_server_repository_url     = module.ecr.ecr_web_server_repository
   ecs_execution_role = module.iam.ecs_execution_role
 }
 

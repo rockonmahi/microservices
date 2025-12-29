@@ -10,7 +10,7 @@ variable "ecs_sg_id" {
 variable "target_group" {
 }
 
-variable "image_url" {
+variable "web_server_repository_url" {
 }
 
 variable "service_name" {

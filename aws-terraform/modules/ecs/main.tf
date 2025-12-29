@@ -18,8 +18,8 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   container_definitions = jsonencode([
     {
       name  = var.service_name
-      image = var.image_url
-      portMappings = [{ containerPort = 8080 }]
+      image = var.web_server_repository_url
+      portMappings = [{ containerPort = 80 }]
     }
   ])
 
@@ -44,7 +44,7 @@ resource "aws_ecs_service" "ecs_service" {
   load_balancer {
     target_group_arn = var.target_group
     container_name   = var.service_name
-    container_port   = 8080
+    container_port   = 80
   }
 
   tags = {
