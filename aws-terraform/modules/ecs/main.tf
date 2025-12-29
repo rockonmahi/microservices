@@ -1,33 +1,10 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "${var.project_name}-microservice-cluster"
+  name = "${var.project_name}-${var.cluster_name}"
 
   tags = {
     Name = "${var.project_name}-ecs-cluster"
     Environment = var.project_name
   }
-}
-
-resource "aws_iam_role" "iam_role" {
-  name = "ecsExecutionRole"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = { Service = "ecs-tasks.amazonaws.com" }
-      Action = "sts:AssumeRole"
-    }]
-  })
-
-  tags = {
-    Name = "${var.project_name}-iam-role"
-    Environment = var.project_name
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "execution" {
-  role       = aws_iam_role.iam_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 resource "aws_ecs_task_definition" "ecs_task_definition" {
@@ -36,7 +13,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   requires_compatibilities = ["FARGATE"]
   cpu    = 512
   memory = 1024
-  execution_role_arn = aws_iam_role.iam_role.arn
+  execution_role_arn = var.ecs_execution_role
 
   container_definitions = jsonencode([
     {

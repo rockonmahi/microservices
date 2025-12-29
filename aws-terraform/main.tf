@@ -20,7 +20,6 @@ module "alb" {
 module "iam" {
   source        = "./modules/iam"
   project_name  = var.project_name
-  image_url     = module.ecr.repository_url
 }
 
 module "ecr" {
@@ -32,9 +31,23 @@ module "ecr" {
 module "ecs" {
   source        = "./modules/ecs"
   project_name  = var.project_name
+  cluster_name = "microservice-ecs-cluster"
   service_name  = "order-service"
   private_subnets = module.vpc.private_subnet_1a_id
   ecs_sg_id     = module.security.ecs_sg_id
   target_group  = module.alb.target_group_arn
   image_url     = module.ecr.repository_url
+  ecs_execution_role = module.iam.ecs_execution_role
+}
+
+module "eks" {
+  source        = "./modules/eks"
+  project_name  = var.project_name
+  private_subnets_id = [module.vpc.private_subnet_1a_id,module.vpc.private_subnet_1b_id]
+  cluster_name = "microservice-eks-cluster"
+  eks_cluster_role = module.iam.eks_cluster_role
+  eks_node_role = module.iam.eks_node_role
+  eks_worker_node_policy = module.iam.eks_worker_node_policy
+  ecr_read = module.iam.ecr_read
+  eks_cni_policy = module.iam.eks_cni_policy
 }
