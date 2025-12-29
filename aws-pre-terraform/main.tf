@@ -36,12 +36,12 @@ module "ecr" {
   service_name  = "web-server"
   private_subnets = module.vpc.private_subnet_1a_id
   ecs_sg_id     = module.security.ecs_sg_id
-  target_group  = module.alb.target_group_arn
+  web_server_target_group  = module.alb.alb_web_server_target_group
   web_server_repository_url     = module.ecr.ecr_web_server_repository
   ecs_execution_role = module.iam.ecs_execution_role
 }
-*/
-/*module "eks" {
+
+module "eks" {
   source        = "./modules/eks"
   project_name  = var.project_name
   private_subnets_id = [module.vpc.private_subnet_1a_id,module.vpc.private_subnet_1b_id]

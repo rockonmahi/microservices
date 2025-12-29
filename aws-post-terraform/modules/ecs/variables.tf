@@ -7,7 +7,7 @@ variable "private_subnets" {
 variable "ecs_sg_id" {
 }
 
-variable "target_group" {
+variable "web_server_target_group" {
 }
 
 variable "web_server_repository_url" {
