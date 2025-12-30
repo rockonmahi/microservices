@@ -1,4 +1,5 @@
 resource "aws_lb" "alb" {
+  name               = "${var.project_name}-alb"
   load_balancer_type = "application"
   subnets            = var.subnets
   security_groups    = [var.alb_sg_id]
