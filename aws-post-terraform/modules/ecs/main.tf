@@ -55,14 +55,14 @@ resource "aws_ecs_service" "ecs_service_web_server" {
   network_configuration {
     subnets         = [var.public_subnets]
     security_groups = [var.ecs_sg_id]
-    assign_public_ip = true
+   /* assign_public_ip = true*/
   }
 
-  /*load_balancer {
+  load_balancer {
     target_group_arn = var.web_server_target_group
     container_name   = var.service_name
     container_port   = 80
-  }*/
+  }
 
   tags = {
     Name = "${var.project_name}-ecs-service"
