@@ -16,7 +16,7 @@ variable "cluster_name" {
 variable "eks_worker_node_policy" {
 }
 
-variable "ecr_read" {
+variable "ec2_container_registry_read" {
 }
 
 variable "eks_cni_policy" {

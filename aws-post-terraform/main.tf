@@ -50,6 +50,6 @@ module "ecs" {
   eks_cluster_role = module.iam.eks_cluster_role
   eks_node_role = module.iam.eks_node_role
   eks_worker_node_policy = module.iam.eks_worker_node_policy
-  ecr_read = module.iam.ecr_read
+  ec2_container_registry_read = module.iam.ec2_container_registry_read
   eks_cni_policy = module.iam.eks_cni_policy
 }*/

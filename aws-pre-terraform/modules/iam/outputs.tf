@@ -14,8 +14,8 @@ output "eks_cni_policy" {
   value = aws_iam_role_policy_attachment.eks_cni_policy
 }
 
-output "ecr_read" {
-  value = aws_iam_role_policy_attachment.ecr_read
+output "ec2_container_registry_read" {
+  value = aws_iam_role_policy_attachment.ec2_container_registry_read
 }
 
 output "ecs_execution_role" {

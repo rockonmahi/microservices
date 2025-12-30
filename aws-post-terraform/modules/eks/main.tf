@@ -28,6 +28,6 @@ resource "aws_eks_node_group" "eks_node_group" {
   depends_on = [
     var.eks_worker_node_policy,
     var.eks_cni_policy,
-    var.ecr_read
+    var.ec2_container_registry_read
   ]
 }

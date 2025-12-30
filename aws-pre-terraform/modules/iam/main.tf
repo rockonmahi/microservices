@@ -41,17 +41,12 @@ resource "aws_iam_role" "github_actions" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "ecr" {
-  role      = aws_iam_role.github_actions.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_deploy" {
+resource "aws_iam_role_policy_attachment" "ecs_full_access_github" {
   role       = aws_iam_role.github_actions.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_admin" {
+resource "aws_iam_role_policy_attachment" "admin_access_github" {
   role       = aws_iam_role.github_actions.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
@@ -120,7 +115,7 @@ resource "aws_iam_role_policy_attachment" "eks_cni_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
 }
 
-resource "aws_iam_role_policy_attachment" "ecr_read" {
+resource "aws_iam_role_policy_attachment" "ec2_container_registry_read" {
   role       = aws_iam_role.eks_node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
