@@ -41,15 +41,15 @@ module "ecs" {
   web_server_repository_url = module.ecr.ecr_web_server_repository
   ecs_execution_role        = module.iam.ecs_execution_role
 }
-
-/*module "eks" {
-  source        = "./modules/eks"
-  project_name  = var.project_name
-  private_subnets_id = [module.vpc.private_subnet_1a_id,module.vpc.private_subnet_1b_id]
-  cluster_name = "microservice-eks-cluster"
-  eks_cluster_role = module.iam.eks_cluster_role
-  eks_node_role = module.iam.eks_node_role
-  eks_worker_node_policy = module.iam.eks_worker_node_policy
+/*
+module "eks" {
+  source                      = "./modules/eks"
+  project_name                = var.project_name
+  private_subnets_id          = [module.vpc.private_subnet_1a_id, module.vpc.private_subnet_1b_id]
+  cluster_name                = "microservice-eks-cluster"
+  eks_cluster_role            = module.iam.eks_cluster_role
+  eks_node_role               = module.iam.eks_node_role
+  eks_worker_node_policy      = module.iam.eks_worker_node_policy
   ec2_container_registry_read = module.iam.ec2_container_registry_read
-  eks_cni_policy = module.iam.eks_cni_policy
+  eks_cni_policy              = module.iam.eks_cni_policy
 }*/

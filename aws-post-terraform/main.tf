@@ -36,7 +36,7 @@ module "ecs" {
   service_name              = "web-server"
   public_subnets            = module.vpc.public_subnet_1a_id
   private_subnets           = module.vpc.private_subnet_1a_id
-  ecs_sg_id                 = module.security.alb_sg_id
+  ecs_sg_id                 = module.security.ecs_sg_id
   web_server_target_group   = module.alb.alb_web_server_target_group
   web_server_repository_url = module.ecr.ecr_web_server_repository
   ecs_execution_role        = module.iam.ecs_execution_role
