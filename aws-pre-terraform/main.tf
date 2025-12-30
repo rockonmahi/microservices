@@ -1,45 +1,45 @@
 module "vpc" {
-  source = "./modules/vpc"
+  source       = "./modules/vpc"
   project_name = var.project_name
 }
 
 module "security" {
-  source = "./modules/security"
+  source       = "./modules/security"
   project_name = var.project_name
-  vpc_id = module.vpc.vpc_id
+  vpc_id       = module.vpc.vpc_id
 }
 
 module "alb" {
-  source     = "./modules/alb"
+  source       = "./modules/alb"
   project_name = var.project_name
-  vpc_id     = module.vpc.vpc_id
-  subnets    = [module.vpc.public_subnet_1a_id,module.vpc.public_subnet_1b_id]
-  alb_sg_id  = module.security.alb_sg_id
+  vpc_id       = module.vpc.vpc_id
+  subnets      = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
+  alb_sg_id    = module.security.alb_sg_id
 }
 
 module "iam" {
-  source        = "./modules/iam"
-  project_name  = var.project_name
+  source       = "./modules/iam"
+  project_name = var.project_name
 }
 
 module "ecr" {
-  source = "./modules/ecr"
-  project_name = var.project_name
-  web_server_repo_name = "${var.project_name}-web-server-repo"
+  source                = "./modules/ecr"
+  project_name          = var.project_name
+  web_server_repo_name  = "${var.project_name}-web-server-repo"
   api_gateway_repo_name = "${var.project_name}-api-gateway-repo"
 }
 
 module "ecs" {
-  source        = "./modules/ecs"
-  project_name  = var.project_name
-  cluster_name = "microservice-ecs-cluster"
-  service_name  = "web-server"
-  public_subnets = module.vpc.public_subnet_1a_id
-  private_subnets = module.vpc.private_subnet_1a_id
-  ecs_sg_id     = module.security.ecs_sg_id
-  web_server_target_group  = module.alb.alb_web_server_target_group
-  web_server_repository_url     = module.ecr.ecr_web_server_repository
-  ecs_execution_role = module.iam.ecs_execution_role
+  source                    = "./modules/ecs"
+  project_name              = var.project_name
+  cluster_name              = "microservice-ecs-cluster"
+  service_name              = "web-server"
+  public_subnets            = module.vpc.public_subnet_1a_id
+  private_subnets           = module.vpc.private_subnet_1a_id
+  ecs_sg_id                 = module.security.ecs_sg_id
+  web_server_target_group   = module.alb.alb_web_server_target_group
+  web_server_repository_url = module.ecr.ecr_web_server_repository
+  ecs_execution_role        = module.iam.ecs_execution_role
 }
 
 /*module "eks" {

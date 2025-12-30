@@ -4,31 +4,31 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "${var.project_name}-vpc"
-	Environment = var.project_name
+    Name        = "${var.project_name}-vpc"
+    Environment = var.project_name
   }
 }
 
 resource "aws_subnet" "public_subnet_1a" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnet_1a_cidr
-  availability_zone       = var.availaility_zone_1a
+  availability_zone       = var.availability_zone_1a
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.project_name}-public-subnet-1a"
-	Environment = var.project_name
+    Name        = "${var.project_name}-public-subnet-1a"
+    Environment = var.project_name
   }
 }
 
 resource "aws_subnet" "public_subnet_1b" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnet_1b_cidr
-  availability_zone       = var.availaility_zone_1b
+  availability_zone       = var.availability_zone_1b
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.project_name}-public-subnet-1b"
+    Name        = "${var.project_name}-public-subnet-1b"
     Environment = var.project_name
   }
 }
@@ -36,10 +36,10 @@ resource "aws_subnet" "public_subnet_1b" {
 resource "aws_subnet" "private_subnet_1a" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_subnet_1a_cidr
-  availability_zone = var.availaility_zone_1a
+  availability_zone = var.availability_zone_1a
 
   tags = {
-    Name = "${var.project_name}-private-subnet-1a"
+    Name        = "${var.project_name}-private-subnet-1a"
     Environment = var.project_name
   }
 }
@@ -47,11 +47,11 @@ resource "aws_subnet" "private_subnet_1a" {
 resource "aws_subnet" "private_subnet_1b" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_subnet_1b_cidr
-  availability_zone = var.availaility_zone_1b
-  
+  availability_zone = var.availability_zone_1b
+
   tags = {
-    Name = "${var.project_name}-private-subnet-1b"
-	Environment = var.project_name
+    Name        = "${var.project_name}-private-subnet-1b"
+    Environment = var.project_name
   }
 }
 
@@ -59,7 +59,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "${var.project_name}-igw"
+    Name        = "${var.project_name}-igw"
     Environment = var.project_name
   }
 }
@@ -68,8 +68,8 @@ resource "aws_eip" "nat_eip" {
   domain = "vpc"
 
   tags = {
-    Name = "${var.project_name}-nat-eip"
-	Environment = var.project_name
+    Name        = "${var.project_name}-nat-eip"
+    Environment = var.project_name
   }
 }
 
@@ -78,8 +78,8 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public_subnet_1a.id
 
   tags = {
-    Name = "${var.project_name}-nat-gateway"
-	Environment = var.project_name
+    Name        = "${var.project_name}-nat-gateway"
+    Environment = var.project_name
   }
 
   depends_on = [aws_internet_gateway.igw]
@@ -94,8 +94,8 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = "${var.project_name}-public-rt"
-	Environment = var.project_name
+    Name        = "${var.project_name}-public-rt"
+    Environment = var.project_name
   }
 }
 
@@ -128,8 +128,7 @@ resource "aws_route_table" "private_rt" {
   }
 
   tags = {
-    Name = "${var.project_name}-private-rt"
-	Environment = var.project_name
+    Name        = "${var.project_name}-private-rt"
+    Environment = var.project_name
   }
 }
-

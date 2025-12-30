@@ -21,10 +21,10 @@ variable "private_subnet_1b_cidr" {
   default = "10.34.48.0/20"
 }
 
-variable "availaility_zone_1a" {
+variable "availability_zone_1a" {
   default = "ap-south-1a"
 }
 
-variable "availaility_zone_1b" {
+variable "availability_zone_1b" {
   default = "ap-south-1b"
 }

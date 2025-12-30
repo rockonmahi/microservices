@@ -1,7 +1,7 @@
 resource "aws_security_group" "alb" {
-  name   = "${var.project_name}-alb-sg"
+  name        = "${var.project_name}-alb-sg"
   description = "${var.project_name} security group for alb"
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 80
@@ -18,15 +18,15 @@ resource "aws_security_group" "alb" {
   }
 
   tags = {
-    Name = "${var.project_name}-alb-sg"
+    Name        = "${var.project_name}-alb-sg"
     Environment = var.project_name
   }
 }
 
 resource "aws_security_group" "ecs" {
-  name   = "${var.project_name}-ecs-sg"
+  name        = "${var.project_name}-ecs-sg"
   description = "${var.project_name} security group for ecs"
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port       = 80
@@ -43,7 +43,7 @@ resource "aws_security_group" "ecs" {
   }
 
   tags = {
-    Name = "${var.project_name}-ecs-sg"
+    Name        = "${var.project_name}-ecs-sg"
     Environment = var.project_name
   }
 }

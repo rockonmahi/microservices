@@ -1,9 +1,9 @@
 resource "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
+  url            = "https://token.actions.githubusercontent.com"
   client_id_list = ["sts.amazonaws.com"]
 
   tags = {
-    Name = "${var.project_name}-openid-connect-provider"
+    Name        = "${var.project_name}-openid-connect-provider"
     Environment = var.project_name
   }
 }
@@ -19,14 +19,14 @@ resource "aws_iam_role" "github_actions" {
         Federated = aws_iam_openid_connect_provider.github.arn
       }
       Action = "sts:AssumeRoleWithWebIdentity"
-      "Condition": {
-        "StringEquals": {
-          "token.actions.githubusercontent.com:aud": [
+      "Condition" : {
+        "StringEquals" : {
+          "token.actions.githubusercontent.com:aud" : [
             "sts.amazonaws.com"
           ]
         },
-        "StringLike": {
-          "token.actions.githubusercontent.com:sub": [
+        "StringLike" : {
+          "token.actions.githubusercontent.com:sub" : [
             "repo:rockonmahi/microservice:ref:refs/heads/main",
             "repo:rockonmahi/microservice:ref:refs/heads/main"
           ]
@@ -36,7 +36,7 @@ resource "aws_iam_role" "github_actions" {
   })
 
   tags = {
-    Name = "${var.project_name}-iam-role"
+    Name        = "${var.project_name}-iam-role"
     Environment = var.project_name
   }
 }
@@ -57,14 +57,14 @@ resource "aws_iam_role" "ecs_execution_role" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect = "Allow"
+      Effect    = "Allow"
       Principal = { Service = "ecs-tasks.amazonaws.com" }
-      Action = "sts:AssumeRole"
+      Action    = "sts:AssumeRole"
     }]
   })
 
   tags = {
-    Name = "${var.project_name}-ecs-iam-role"
+    Name        = "${var.project_name}-ecs-iam-role"
     Environment = var.project_name
   }
 }
@@ -80,9 +80,9 @@ resource "aws_iam_role" "eks_cluster_role" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect = "Allow"
+      Effect    = "Allow"
       Principal = { Service = "eks.amazonaws.com" }
-      Action = "sts:AssumeRole"
+      Action    = "sts:AssumeRole"
     }]
   })
 }
@@ -98,9 +98,9 @@ resource "aws_iam_role" "eks_node_role" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect = "Allow"
+      Effect    = "Allow"
       Principal = { Service = "ec2.amazonaws.com" }
-      Action = "sts:AssumeRole"
+      Action    = "sts:AssumeRole"
     }]
   })
 }

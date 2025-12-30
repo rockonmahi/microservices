@@ -2,7 +2,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.project_name}-${var.cluster_name}"
 
   tags = {
-    Name = "${var.project_name}-ecs-cluster"
+    Name        = "${var.project_name}-ecs-cluster"
     Environment = var.project_name
   }
 }
@@ -22,9 +22,9 @@ resource "aws_ecs_task_definition" "ecs_web_server_task_definition" {
   family                   = var.service_name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu    = 1024
-  memory = 3072
-  execution_role_arn = var.ecs_execution_role
+  cpu                      = 1024
+  memory                   = 3072
+  execution_role_arn       = var.ecs_execution_role
 
   runtime_platform {
     operating_system_family = "LINUX"
@@ -33,14 +33,14 @@ resource "aws_ecs_task_definition" "ecs_web_server_task_definition" {
 
   container_definitions = jsonencode([
     {
-      name  = var.service_name
-      image = var.web_server_repository_url
+      name         = var.service_name
+      image        = var.web_server_repository_url
       portMappings = [{ containerPort = 80 }]
     }
   ])
 
   tags = {
-    Name = "${var.project_name}-ecs-task-definition"
+    Name        = "${var.project_name}-ecs-task-definition"
     Environment = var.project_name
   }
 }
@@ -55,7 +55,7 @@ resource "aws_ecs_service" "ecs_service_web_server" {
   network_configuration {
     subnets         = [var.public_subnets]
     security_groups = [var.ecs_sg_id]
-   /* assign_public_ip = true*/
+    /* assign_public_ip = true*/
   }
 
   load_balancer {
@@ -65,7 +65,7 @@ resource "aws_ecs_service" "ecs_service_web_server" {
   }
 
   tags = {
-    Name = "${var.project_name}-ecs-service"
+    Name        = "${var.project_name}-ecs-service"
     Environment = var.project_name
   }
 }

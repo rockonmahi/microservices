@@ -4,7 +4,7 @@ resource "aws_lb" "alb" {
   security_groups    = [var.alb_sg_id]
 
   tags = {
-    Name = "${var.project_name}-alb"
+    Name        = "${var.project_name}-alb"
     Environment = var.project_name
   }
 }
@@ -17,7 +17,7 @@ resource "aws_lb_target_group" "alb_web_server_target_group" {
   target_type = "ip"
 
   tags = {
-    Name = "${var.project_name}-alb-tg"
+    Name        = "${var.project_name}-alb-tg"
     Environment = var.project_name
   }
 }
@@ -33,7 +33,7 @@ resource "aws_lb_listener" "alb_web_server_listener" {
   }
 
   tags = {
-    Name = "${var.project_name}-alb-listener"
+    Name        = "${var.project_name}-alb-listener"
     Environment = var.project_name
   }
 }
