@@ -18,7 +18,7 @@ resource "aws_ecs_cluster_capacity_providers" "ecs_cluster_capacity_providers" {
 }
 
 resource "aws_ecs_task_definition" "ecs_web_server_task_definition" {
-  family                   = var.service_name
+  family                   = var.web_server_name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 1024
@@ -32,9 +32,9 @@ resource "aws_ecs_task_definition" "ecs_web_server_task_definition" {
 
   container_definitions = jsonencode([
     {
-      name         = var.service_name
+      name         = var.web_server_name
       image        = var.web_server_repository_url
-      portMappings = [{ containerPort = 80 }]
+      portMappings = [{ containerPort = var.web_server_port }]
     }
   ])
 
@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "ecs_web_server_task_definition" {
 }
 
 resource "aws_ecs_service" "ecs_service_web_server" {
-  name            = "${var.project_name}-${var.service_name}"
+  name            = "${var.project_name}-${var.web_server_name}"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_web_server_task_definition.arn
   desired_count   = 1
@@ -54,13 +54,12 @@ resource "aws_ecs_service" "ecs_service_web_server" {
   network_configuration {
     subnets         = [var.private_subnets]
     security_groups = [var.ecs_sg_id]
-    /* assign_public_ip = true*/
   }
 
   load_balancer {
     target_group_arn = var.web_server_target_group
-    container_name   = var.service_name
-    container_port   = 80
+    container_name   = var.web_server_name
+    container_port   = var.web_server_port
   }
 
   tags = {

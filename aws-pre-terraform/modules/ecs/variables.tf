@@ -16,9 +16,12 @@ variable "web_server_target_group" {
 variable "web_server_repository_url" {
 }
 
-variable "service_name" {
+variable "web_server_name" {
   description = "ECS service name"
   type        = string
+}
+
+variable "web_server_port" {
 }
 
 variable "cluster_name" {

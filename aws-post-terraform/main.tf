@@ -7,6 +7,7 @@ module "security" {
   source       = "./modules/security"
   project_name = var.project_name
   vpc_id       = module.vpc.vpc_id
+  web_server_port =module.ecs.web_server_port
 }
 
 module "alb" {
@@ -33,7 +34,8 @@ module "ecs" {
   source                    = "./modules/ecs"
   project_name              = var.project_name
   cluster_name              = "microservice-ecs-cluster"
-  service_name              = "web-server"
+  web_server_name           = "web-server"
+  web_server_port           = 80
   public_subnets            = module.vpc.public_subnet_1a_id
   private_subnets           = module.vpc.private_subnet_1a_id
   ecs_sg_id                 = module.security.ecs_sg_id
