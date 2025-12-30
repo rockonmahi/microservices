@@ -9,7 +9,6 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 resource "aws_ecs_cluster_capacity_providers" "ecs_cluster_capacity_providers" {
   cluster_name = aws_ecs_cluster.ecs_cluster.name
-
   capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 
   default_capacity_provider_strategy {
@@ -49,11 +48,11 @@ resource "aws_ecs_service" "ecs_service_web_server" {
   name            = "${var.project_name}-${var.service_name}"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_web_server_task_definition.arn
-  desired_count   = 2
+  desired_count   = 1
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [var.private_subnets,var.public_subnets]
+    subnets         = [var.private_subnets]
     security_groups = [var.ecs_sg_id]
     /* assign_public_ip = true*/
   }
