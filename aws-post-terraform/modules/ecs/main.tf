@@ -7,13 +7,29 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   }
 }
 
+resource "aws_ecs_cluster_capacity_providers" "ecs_cluster_capacity_providers" {
+  cluster_name = aws_ecs_cluster.ecs_cluster.name
+
+  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
+
+  default_capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
+}
+
 resource "aws_ecs_task_definition" "ecs_web_server_task_definition" {
   family                   = var.service_name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu    = 512
-  memory = 1024
+  cpu    = 1024
+  memory = 3072
   execution_role_arn = var.ecs_execution_role
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
 
   container_definitions = jsonencode([
     {
@@ -39,13 +55,14 @@ resource "aws_ecs_service" "ecs_service_web_server" {
   network_configuration {
     subnets         = [var.public_subnets]
     security_groups = [var.ecs_sg_id]
+    assign_public_ip = true
   }
 
-  load_balancer {
+  /*load_balancer {
     target_group_arn = var.web_server_target_group
     container_name   = var.service_name
     container_port   = 80
-  }
+  }*/
 
   tags = {
     Name = "${var.project_name}-ecs-service"
