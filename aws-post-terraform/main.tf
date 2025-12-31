@@ -16,6 +16,7 @@ module "alb" {
   vpc_id       = module.vpc.vpc_id
   subnets      = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
   alb_sg_id    = module.security.alb_sg_id
+  web_server_port =module.ecs.web_server_port
 }
 
 module "iam" {
