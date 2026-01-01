@@ -18,7 +18,7 @@ resource "aws_lb_target_group" "alb_web_server_target_group" {
   target_type = "ip"
 
   tags = {
-    Name        = "${var.project_name}-alb-tg"
+    Name        = "${var.project_name}-alb-tg-web-server"
     Environment = var.project_name
   }
 }
@@ -34,7 +34,36 @@ resource "aws_lb_listener" "alb_web_server_listener" {
   }
 
   tags = {
-    Name        = "${var.project_name}-alb-listener"
+    Name        = "${var.project_name}-alb-listener-web-server"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_lb_target_group" "alb_api_gateway_target_group" {
+  name        = "${var.project_name}-alb-tg"
+  port        = var.web_server_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  tags = {
+    Name        = "${var.project_name}-alb-tg-api-gateway"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_lb_listener" "alb_api_gateway_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = var.api_gateway_port
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb_web_server_target_group.arn
+  }
+
+  tags = {
+    Name        = "${var.project_name}-alb-listener-api-gateway"
     Environment = var.project_name
   }
 }

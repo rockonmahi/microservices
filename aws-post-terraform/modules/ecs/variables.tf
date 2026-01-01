@@ -10,10 +10,16 @@ variable "private_subnets" {
 variable "ecs_sg_id" {
 }
 
-variable "web_server_target_group" {
+variable "alb_web_server_target_group_arn" {
 }
 
 variable "web_server_repository_url" {
+}
+
+variable "alb_api_gateway_target_group_arn" {
+}
+
+variable "api_gateway_repository_url" {
 }
 
 variable "web_server_name" {
@@ -22,6 +28,14 @@ variable "web_server_name" {
 }
 
 variable "web_server_port" {
+}
+
+variable "api_gateway_name" {
+  description = "ECS service name"
+  type        = string
+}
+
+variable "api_gateway_port" {
 }
 
 variable "cluster_name" {

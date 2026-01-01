@@ -39,7 +39,7 @@ resource "aws_ecs_task_definition" "ecs_web_server_task_definition" {
   ])
 
   tags = {
-    Name        = "${var.project_name}-ecs-task-definition"
+    Name        = "${var.project_name}-ecs-task-definition-web-server"
     Environment = var.project_name
   }
 }
@@ -57,13 +57,64 @@ resource "aws_ecs_service" "ecs_service_web_server" {
   }
 
   load_balancer {
-    target_group_arn = var.web_server_target_group
+    target_group_arn = var.alb_web_server_target_group_arn
     container_name   = var.web_server_name
     container_port   = var.web_server_port
   }
 
   tags = {
-    Name        = "${var.project_name}-ecs-service"
+    Name        = "${var.project_name}-ecs-service-web-server"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_ecs_task_definition" "ecs_api_gateway_task_definition" {
+  family                   = var.api_gateway_name
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 1024
+  memory                   = 3072
+  execution_role_arn       = var.ecs_execution_role
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+
+  container_definitions = jsonencode([
+    {
+      name         = var.api_gateway_name
+      image        = var.api_gateway_repository_url
+      portMappings = [{ containerPort = var.api_gateway_port }]
+    }
+  ])
+
+  tags = {
+    Name        = "${var.project_name}-ecs-task-definition-api-gateway"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_ecs_service" "ecs_service_api_gateway" {
+  name            = "${var.project_name}-${var.api_gateway_name}"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
+  task_definition = aws_ecs_task_definition.ecs_api_gateway_task_definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets         = [var.private_subnets]
+    security_groups = [var.ecs_sg_id]
+  }
+
+  load_balancer {
+    target_group_arn = var.alb_api_gateway_target_group_arn
+    container_name   = var.api_gateway_name
+    container_port   = var.api_gateway_port
+  }
+
+  tags = {
+    Name        = "${var.project_name}-ecs-service-api-gateway"
     Environment = var.project_name
   }
 }
