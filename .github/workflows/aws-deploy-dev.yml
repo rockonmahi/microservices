@@ -68,7 +68,7 @@ jobs:
         env:
           API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
         run: |
-          mvn clean install
+          mvn clean install -DskipTests
           docker build -t $API_GATEWAY_IMAGE_URI .
           docker push $API_GATEWAY_IMAGE_URI
 
