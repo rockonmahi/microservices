@@ -11,9 +11,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./database/mysql/data:/var/lib/mysql
-      - ./database/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./database/mysql/sql:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/sql:/docker-entrypoint-initdb.d
     networks:
       - escola-network
           #ipv4_address: 172.52.2.2
@@ -27,7 +27,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./database/postgresql:/var/lib/postgresql/data
+      - ./postgresql:/var/lib/postgresql/data
     networks:
       - escola-network
           #ipv4_address: 172.52.2.3
@@ -42,7 +42,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./database/mongodb/data:/data/db
+      - ./mongodb/data:/data/db
     networks:
       - escola-network
           #ipv4_address: 172.52.2.4
@@ -56,8 +56,8 @@ services:
     ports:
       - "9200:9200"
     volumes:
-      - ./database/elasticsearch/data:/usr/share/elasticsearch/data
-      - ./database/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     networks:
       - escola-network
           #ipv4_address: 172.52.2.5
