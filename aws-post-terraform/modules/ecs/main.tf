@@ -68,6 +68,57 @@ resource "aws_ecs_service" "ecs_service_web_server" {
   }
 }
 
+resource "aws_ecs_task_definition" "ecs_config_server_task_definition" {
+  family                   = var.config_server_name
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 1024
+  memory                   = 3072
+  execution_role_arn       = var.ecs_execution_role
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+
+  container_definitions = jsonencode([
+    {
+      name         = var.config_server_name
+      image        = var.config_server_repository_url
+      portMappings = [{ containerPort = var.config_server_port }]
+    }
+  ])
+
+  tags = {
+    Name        = "${var.project_name}-ecs-task-definition-config-server"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_ecs_service" "ecs_service_config_server" {
+  name            = "${var.project_name}-${var.config_server_name}"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
+  task_definition = aws_ecs_task_definition.ecs_config_server_task_definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets         = [var.private_subnets]
+    security_groups = [var.ecs_sg_id]
+  }
+
+  load_balancer {
+    target_group_arn = var.alb_config_server_target_group_arn
+    container_name   = var.config_server_name
+    container_port   = var.config_server_port
+  }
+
+  tags = {
+    Name        = "${var.project_name}-ecs-service-config-server"
+    Environment = var.project_name
+  }
+}
+
 resource "aws_ecs_task_definition" "ecs_api_gateway_task_definition" {
   family                   = var.api_gateway_name
   network_mode             = "awsvpc"

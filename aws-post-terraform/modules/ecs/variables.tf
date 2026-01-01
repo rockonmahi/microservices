@@ -16,6 +16,12 @@ variable "alb_web_server_target_group_arn" {
 variable "web_server_repository_url" {
 }
 
+variable "alb_config_server_target_group_arn" {
+}
+
+variable "config_server_repository_url" {
+}
+
 variable "alb_api_gateway_target_group_arn" {
 }
 
@@ -28,6 +34,12 @@ variable "web_server_name" {
 }
 
 variable "web_server_port" {
+}
+
+variable "config_server_port" {
+}
+
+variable "config_server_name" {
 }
 
 variable "api_gateway_name" {

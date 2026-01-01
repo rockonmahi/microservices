@@ -72,6 +72,15 @@ jobs:
           docker build -t $API_GATEWAY_IMAGE_URI .
           docker push $API_GATEWAY_IMAGE_URI
 
+      - name: Build config-server Image
+        working-directory: ./config-server
+        env:
+          CONFIG_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_CONFIG_SERVER_ECR_REPO}}:latest
+        run: |
+          mvn clean install -DskipTests
+          docker build -t $CONFIG_SERVER_IMAGE_URI .
+          docker push $CONFIG_SERVER_IMAGE_URI
+
       - name: Post Terraform Init
         working-directory: ./aws-post-terraform
         run: terraform init
