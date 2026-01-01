@@ -40,7 +40,7 @@ module "ecs" {
   web_server_name                  = "web-server"
   web_server_port                  = 80
   api_gateway_name                 = "api-gateway"
-  api_gateway_port                 = 8080
+  api_gateway_port                 = 5114
   public_subnets                   = module.vpc.public_subnet_1a_id
   private_subnets                  = module.vpc.private_subnet_1a_id
   ecs_sg_id                        = module.security.ecs_sg_id
