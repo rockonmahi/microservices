@@ -49,7 +49,7 @@ jobs:
         working-directory: ./aws-post-terraform
         id: alb
         run: |
-          echo "ALB_URL=http://$(terraform output -raw alb_dns_name)" >> $GITHUB_ENV
+          echo "ALB_URL=http://$(terraform output -raw alb_dns_url)" >> $GITHUB_ENV
 
       - name: Print ALB URL
         run: echo "ALB URL is $ALB_URL"

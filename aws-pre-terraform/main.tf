@@ -42,6 +42,7 @@ module "ecr" {
 module "ecs" {
   source                                = "./modules/ecs"
   project_name                          = var.project_name
+  aws_region                            = var.aws_region
   cluster_name                          = "${var.project_name}-microservice-ecs-cluster"
   web_server_name                       = "web-server"
   web_server_port                       = 80

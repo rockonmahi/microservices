@@ -1,4 +1,4 @@
-output "alb_url" {
+output "alb_dns_url" {
   value = module.alb.alb_dns
 }
 
