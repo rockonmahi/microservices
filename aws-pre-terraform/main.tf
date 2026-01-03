@@ -8,6 +8,8 @@ module "security" {
   project_name     = var.project_name
   vpc_id           = module.vpc.vpc_id
   web_server_port  = module.ecs.web_server_port
+  registry_service_port = module.ecs.registry_service_port
+  config_server_port    = module.ecs.config_server_port
   api_gateway_port = module.ecs.api_gateway_port
 }
 

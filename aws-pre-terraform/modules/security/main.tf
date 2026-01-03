@@ -9,6 +9,24 @@ resource "aws_security_group" "alb_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port   = var.registry_service_port
+    to_port     = var.registry_service_port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = var.config_server_port
+    to_port     = var.config_server_port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = var.api_gateway_port
+    to_port     = var.api_gateway_port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0
@@ -31,6 +49,18 @@ resource "aws_security_group" "ecs_sg" {
   ingress {
     from_port   = var.web_server_port
     to_port     = var.web_server_port
+    protocol    = "tcp"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+  ingress {
+    from_port   = var.registry_service_port
+    to_port     = var.registry_service_port
+    protocol    = "tcp"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+  ingress {
+    from_port   = var.config_server_port
+    to_port     = var.config_server_port
     protocol    = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
   }
