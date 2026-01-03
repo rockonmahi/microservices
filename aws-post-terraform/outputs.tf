@@ -2,12 +2,20 @@ output "alb_url" {
   value = module.alb.alb_dns
 }
 
-output "ecr_web_server_repository" {
-  value = module.ecr.ecr_web_server_repository
+output "web_server_ecr_repository_url" {
+  value = module.ecr.web_server_ecr_repository_url
+}
+
+output "registry_service_ecr_repository_url" {
+  value = module.ecr.registry_service_ecr_repository_url
+}
+
+output "config_server_ecr_repository_url" {
+  value = module.ecr.config_server_ecr_repository_url
 }
 
 output "ecr_api_gateway_repository" {
-  value = module.ecr.ecr_api_gateway_repository
+  value = module.ecr.api_gateway_ecr_repository_url
 }
 
 output "ecs_cluster_name" {

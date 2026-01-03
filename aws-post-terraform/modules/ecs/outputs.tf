@@ -10,6 +10,10 @@ output "web_server_port" {
   value = var.web_server_port
 }
 
+output "registry_service_port" {
+  value = var.registry_service_port
+}
+
 output "config_server_port" {
   value = var.config_server_port
 }

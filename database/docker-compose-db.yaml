@@ -61,14 +61,6 @@ services:
     networks:
       - escola-network
           #ipv4_address: 172.52.2.5
-  zipkin:
-    container_name: zipkin
-    image: openzipkin/zipkin
-    ports:
-      - "9411:9411"
-    networks:
-      - escola-network
-        #ipv4_address: 172.52.2.11
 networks:
   escola-network:
     external: true

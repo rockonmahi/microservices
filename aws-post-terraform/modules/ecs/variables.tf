@@ -10,30 +10,40 @@ variable "private_subnets" {
 variable "ecs_sg_id" {
 }
 
-variable "alb_web_server_target_group_arn" {
+variable "web_server_alb_target_group_arn" {
 }
 
 variable "web_server_repository_url" {
 }
 
-variable "alb_config_server_target_group_arn" {
+variable "registry_service_alb_target_group_arn" {
+}
+
+variable "registry_service_repository_url" {
+}
+
+variable "config_server_alb_target_group_arn" {
 }
 
 variable "config_server_repository_url" {
 }
 
-variable "alb_api_gateway_target_group_arn" {
+variable "api_gateway_alb_target_group_arn" {
 }
 
 variable "api_gateway_repository_url" {
 }
 
 variable "web_server_name" {
-  description = "ECS service name"
-  type        = string
 }
 
 variable "web_server_port" {
+}
+
+variable "registry_service_name" {
+}
+
+variable "registry_service_port" {
 }
 
 variable "config_server_port" {

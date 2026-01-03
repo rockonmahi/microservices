@@ -13,6 +13,9 @@ variable "alb_sg_id" {
 variable "web_server_port" {
 }
 
+variable "registry_service_port" {
+}
+
 variable "config_server_port" {
 }
 

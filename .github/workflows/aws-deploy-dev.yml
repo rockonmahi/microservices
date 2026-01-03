@@ -63,14 +63,14 @@ jobs:
           docker build -t $WEB_SERVER_IMAGE_URI .
           docker push $WEB_SERVER_IMAGE_URI
 
-      - name: Build api-gateway Image
-        working-directory: ./api-gateway
+      - name: Build registry-service Image
+        working-directory: ./registry-service
         env:
-          API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
+          REGISTRY_SERVICE_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_REGISTRY_SERVICE_ECR_REPO}}:latest
         run: |
           mvn clean install -DskipTests
-          docker build -t $API_GATEWAY_IMAGE_URI .
-          docker push $API_GATEWAY_IMAGE_URI
+          docker build -t $REGISTRY_SERVICE_IMAGE_URI .
+          docker push $REGISTRY_SERVICE_IMAGE_URI
 
       - name: Build config-server Image
         working-directory: ./config-server
@@ -80,6 +80,15 @@ jobs:
           mvn clean install -DskipTests
           docker build -t $CONFIG_SERVER_IMAGE_URI .
           docker push $CONFIG_SERVER_IMAGE_URI
+
+      - name: Build api-gateway Image
+        working-directory: ./api-gateway
+        env:
+          API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
+        run: |
+          mvn clean install -DskipTests
+          docker build -t $API_GATEWAY_IMAGE_URI .
+          docker push $API_GATEWAY_IMAGE_URI
 
       - name: Post Terraform Init
         working-directory: ./aws-post-terraform
