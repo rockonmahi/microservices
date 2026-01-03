@@ -1,4 +1,4 @@
-name: AWS Deploy Microservice
+name: AWS Deploy Microservices
 
 on:
   push:
