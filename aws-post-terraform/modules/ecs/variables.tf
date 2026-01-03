@@ -1,6 +1,9 @@
 variable "project_name" {
 }
 
+variable "aws_region" {
+}
+
 variable "public_subnets" {
 }
 
@@ -42,6 +45,7 @@ variable "web_server_port" {
 
 variable "registry_service_name" {
 }
+
 
 variable "registry_service_port" {
 }

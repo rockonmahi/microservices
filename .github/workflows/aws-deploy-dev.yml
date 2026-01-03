@@ -45,6 +45,15 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
 
+      - name: Get ALB URL from Terraform
+        working-directory: ./aws-post-terraform
+        id: alb
+        run: |
+          echo "ALB_URL=http://$(terraform output -raw alb_dns_name)" >> $GITHUB_ENV
+
+      - name: Print ALB URL
+        run: echo "ALB URL is $ALB_URL"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -76,6 +85,8 @@ jobs:
         working-directory: ./config-server
         env:
           CONFIG_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_CONFIG_SERVER_ECR_REPO}}:latest
+          ALB_URL: ${{ env.ALB_URL }}
+
         run: |
           mvn clean install -DskipTests
           docker build -t $CONFIG_SERVER_IMAGE_URI .

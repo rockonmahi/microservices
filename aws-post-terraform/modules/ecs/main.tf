@@ -1,3 +1,14 @@
+resource "aws_cloudwatch_log_group" "ecs" {
+  name              = "/ecs/${var.project_name}"
+  retention_in_days = 7
+
+  tags = {
+    Name        = "${var.project_name}-ecs-logs"
+    Environment = var.project_name
+  }
+}
+
+
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.project_name}-${var.cluster_name}"
 
@@ -136,6 +147,14 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
     {
       name         = var.config_server_name
       image        = var.config_server_repository_url
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.ecs.name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
       portMappings = [{ containerPort = var.config_server_port }]
     }
   ])
