@@ -1,16 +1,5 @@
-resource "aws_cloudwatch_log_group" "ecs" {
-  name              = "/ecs/${var.project_name}"
-  retention_in_days = 7
-
-  tags = {
-    Name        = "${var.project_name}-ecs-logs"
-    Environment = var.project_name
-  }
-}
-
-
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "${var.project_name}-${var.cluster_name}"
+  name = var.cluster_name
 
   tags = {
     Name        = "${var.project_name}-ecs-cluster"
@@ -45,6 +34,14 @@ resource "aws_ecs_task_definition" "web_server_ecs_task_definition" {
     {
       name         = var.web_server_name
       image        = var.web_server_repository_url
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = var.cloudwatch_log_group_name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
       portMappings = [{ containerPort = var.web_server_port }]
     }
   ])
@@ -96,6 +93,14 @@ resource "aws_ecs_task_definition" "registry_service_ecs_task_definition" {
     {
       name         = var.registry_service_name
       image        = var.registry_service_repository_url
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = var.cloudwatch_log_group_name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
       portMappings = [{ containerPort = var.registry_service_port }]
     }
   ])
@@ -150,7 +155,7 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.ecs.name
+          awslogs-group         = var.cloudwatch_log_group_name
           awslogs-region        = var.aws_region
           awslogs-stream-prefix = "ecs"
         }
@@ -206,6 +211,14 @@ resource "aws_ecs_task_definition" "api_gateway_ecs_task_definition" {
     {
       name         = var.api_gateway_name
       image        = var.api_gateway_repository_url
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = var.cloudwatch_log_group_name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
       portMappings = [{ containerPort = var.api_gateway_port }]
     }
   ])

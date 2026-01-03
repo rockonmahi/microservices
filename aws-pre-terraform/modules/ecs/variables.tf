@@ -4,7 +4,7 @@ variable "project_name" {
 variable "aws_region" {
 }
 
-variable "public_subnets" {
+variable "cloudwatch_log_group_name" {
 }
 
 variable "private_subnets" {
@@ -46,7 +46,6 @@ variable "web_server_port" {
 variable "registry_service_name" {
 }
 
-
 variable "registry_service_port" {
 }
 
@@ -57,8 +56,6 @@ variable "config_server_name" {
 }
 
 variable "api_gateway_name" {
-  description = "ECS service name"
-  type        = string
 }
 
 variable "api_gateway_port" {

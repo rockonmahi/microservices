@@ -25,6 +25,11 @@ module "alb" {
   api_gateway_port      = module.ecs.api_gateway_port
 }
 
+module "cloudwatch" {
+  source                = "./modules/cloudwatch"
+  project_name          = var.project_name
+}
+
 module "iam" {
   source       = "./modules/iam"
   project_name = var.project_name
@@ -44,15 +49,15 @@ module "ecs" {
   project_name                          = var.project_name
   aws_region                            = var.aws_region
   cluster_name                          = "${var.project_name}-microservice-ecs-cluster"
-  web_server_name                       = "web-server"
   web_server_port                       = 80
-  registry_service_name                 = "registry-service"
+  web_server_name                       = "${var.project_name}-web-server"
   registry_service_port                 = 5112
-  config_server_name                    = "config-server"
+  registry_service_name                 = "${var.project_name}-registry-service"
   config_server_port                    = 5113
-  api_gateway_name                      = "api-gateway"
+  config_server_name                    = "${var.project_name}-config-server"
   api_gateway_port                      = 5114
-  public_subnets                        = module.vpc.public_subnet_1a_id
+  api_gateway_name                      = "${var.project_name}-api-gateway"
+  cloudwatch_log_group_name             = module.cloudwatch.cloudwatch_log_group_name
   private_subnets                       = module.vpc.private_subnet_1a_id
   ecs_sg_id                             = module.security.ecs_sg_id
   web_server_alb_target_group_arn       = module.alb.web_server_alb_target_group_arn
