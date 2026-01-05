@@ -4,6 +4,9 @@ variable "project_name" {
 variable "aws_region" {
 }
 
+variable "alb_dns" {
+}
+
 variable "cloudwatch_log_group_name" {
 }
 

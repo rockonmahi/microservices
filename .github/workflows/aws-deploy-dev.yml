@@ -45,16 +45,6 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
 
-      - name: Get ALB URL from Terraform
-        working-directory: ./aws-post-terraform
-        id: alb
-        run: |
-          terraform init
-          echo "ALB_URL=http://$(terraform output -raw alb_dns_url)" >> $GITHUB_ENV
-
-      - name: Print ALB URL
-        run: echo "ALB URL is $ALB_URL"
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:

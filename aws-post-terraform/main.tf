@@ -52,6 +52,7 @@ module "ecs" {
   project_name                          = var.project_name
   aws_region                            = var.aws_region
   cluster_name                          = "${var.project_name}-microservice-ecs-cluster"
+  alb_dns                               = module.alb.alb_dns
   zipkin_port                           = 9411
   zipkin_name                           = "${var.project_name}-zipkin"
   zipkin_alb_target_group_arn           = module.alb.zipkin_alb_target_group_arn

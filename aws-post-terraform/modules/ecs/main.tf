@@ -211,6 +211,16 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
     {
       name         = var.config_server_name
       image        = var.config_server_repository_url
+      environment = [
+        {
+          name  = "AWS_ALB_DNS"
+          value = var.alb_dns
+        },
+        {
+          name  = "REGISTRY_SERVICE_PORT"
+          value = var.registry_service_port
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
