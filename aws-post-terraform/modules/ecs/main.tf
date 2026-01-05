@@ -214,11 +214,11 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
       environment = [
         {
           name  = "AWS_ALB_DNS"
-          value = var.alb_dns
+          value = tostring(var.alb_dns)
         },
         {
           name  = "REGISTRY_SERVICE_PORT"
-          value = var.registry_service_port
+          value = tostring(var.registry_service_port)
         }
       ]
       logConfiguration = {

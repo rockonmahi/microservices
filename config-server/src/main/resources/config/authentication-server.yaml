@@ -7,14 +7,14 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: "http://registry-service:5112/eureka/"
+      defaultZone: ${AWS_ALB_DNS}:${REGISTRY_SERVICE_PORT}/eureka/
 management:
   tracing:
     sampling:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: "http://zipkin:9411/api/v2/spans"
+      endpoint: ${AWS_ALB_DNS}:9411/api/v2/spans
 logging:
   level:
     org:
