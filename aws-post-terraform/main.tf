@@ -51,7 +51,7 @@ module "ecs" {
   source                                = "./modules/ecs"
   project_name                          = var.project_name
   aws_region                            = var.aws_region
-  cluster_name                          = "${var.project_name}-microservice-ecs-cluster"
+  cluster_name                          = "${var.project_name}-ecs-cluster"
   alb_dns                               = module.alb.alb_dns
   cloudwatch_log_group_name             = module.cloudwatch.cloudwatch_log_group_name
   private_subnets                       = module.vpc.private_subnet_1a_id
