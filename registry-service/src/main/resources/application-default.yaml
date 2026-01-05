@@ -1,10 +1,8 @@
 server:
   port: 6112
-
 spring:
   application:
     name: registry-service
-
 eureka:
   instance:
     hostname: localhost

@@ -38,6 +38,10 @@ resource "aws_ecs_task_definition" "zipkin_ecs_task_definition" {
         {
           name  = "AWS_ALB_DNS"
           value = tostring(var.alb_dns)
+        },
+        {
+          name  = "ZIPKIN_PORT"
+          value = tostring(var.zipkin_port)
         }
       ]
       logConfiguration = {
@@ -58,7 +62,7 @@ resource "aws_ecs_task_definition" "zipkin_ecs_task_definition" {
   }
 }
 
-resource "aws_ecs_service" "zepkin_ecs_service" {
+resource "aws_ecs_service" "zipkin_ecs_service" {
   name            = "${var.project_name}-${var.zipkin_name}"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.zipkin_ecs_task_definition.arn
@@ -233,8 +237,16 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
           value = tostring(var.alb_dns)
         },
         {
+          name  = "CONFIG_SERVER_PORT"
+          value = tostring(var.config_server_port)
+        },
+        {
           name  = "REGISTRY_SERVICE_PORT"
           value = tostring(var.registry_service_port)
+        },
+        {
+          name  = "ZIPKIN_PORT"
+          value = tostring(var.zipkin_port)
         }
       ]
       logConfiguration = {
@@ -302,8 +314,16 @@ resource "aws_ecs_task_definition" "api_gateway_ecs_task_definition" {
           value = tostring(var.alb_dns)
         },
         {
+          name  = "CONFIG_SERVER_PORT"
+          value = tostring(var.config_server_port)
+        },
+        {
           name  = "REGISTRY_SERVICE_PORT"
           value = tostring(var.registry_service_port)
+        },
+        {
+          name  = "ZIPKIN_PORT"
+          value = tostring(var.zipkin_port)
         }
       ]
       logConfiguration = {

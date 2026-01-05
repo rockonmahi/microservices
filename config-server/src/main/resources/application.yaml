@@ -1,5 +1,5 @@
 server:
-  port: 5113
+  port: ${CONFIG_SERVER_PORT}
 spring:
   profiles:
     active: native
@@ -8,4 +8,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${AWS_ALB_DNS}:${REGISTRY_SERVICE_PORT}/eureka/
+      defaultZone: http://${AWS_ALB_DNS}:${REGISTRY_SERVICE_PORT}/eureka

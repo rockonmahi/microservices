@@ -29,14 +29,14 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${AWS_ALB_DNS}:${REGISTRY_SERVICE_PORT}/eureka/
+      defaultZone: http://${AWS_ALB_DNS}:${REGISTRY_SERVICE_PORT}/eureka
 management:
   tracing:
     sampling:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: ${AWS_ALB_DNS}:9411/api/v2/spans
+      endpoint: http://${AWS_ALB_DNS}:${ZIPKIN_PORT}/api/v2/spans
 logging:
   level:
     org:

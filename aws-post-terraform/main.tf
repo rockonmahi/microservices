@@ -53,6 +53,10 @@ module "ecs" {
   aws_region                            = var.aws_region
   cluster_name                          = "${var.project_name}-microservice-ecs-cluster"
   alb_dns                               = module.alb.alb_dns
+  cloudwatch_log_group_name             = module.cloudwatch.cloudwatch_log_group_name
+  private_subnets                       = module.vpc.private_subnet_1a_id
+  ecs_sg_id                             = module.security.ecs_sg_id
+  ecs_execution_role                    = module.iam.ecs_execution_role
   zipkin_port                           = 9411
   zipkin_name                           = "zipkin"
   zipkin_alb_target_group_arn           = module.alb.zipkin_alb_target_group_arn
@@ -73,10 +77,6 @@ module "ecs" {
   api_gateway_name                      = "api-gateway"
   api_gateway_alb_target_group_arn      = module.alb.api_gateway_alb_target_group_arn
   api_gateway_repository_url            = module.ecr.api_gateway_ecr_repository_url
-  cloudwatch_log_group_name             = module.cloudwatch.cloudwatch_log_group_name
-  private_subnets                       = module.vpc.private_subnet_1a_id
-  ecs_sg_id                             = module.security.ecs_sg_id
-  ecs_execution_role                    = module.iam.ecs_execution_role
 }
 
 /*
