@@ -34,6 +34,12 @@ resource "aws_ecs_task_definition" "zipkin_ecs_task_definition" {
     {
       name  = var.zipkin_name
       image = var.zipkin_repository_url
+      environment = [
+        {
+          name  = "AWS_ALB_DNS"
+          value = tostring(var.alb_dns)
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -152,6 +158,16 @@ resource "aws_ecs_task_definition" "registry_service_ecs_task_definition" {
     {
       name  = var.registry_service_name
       image = var.registry_service_repository_url
+      environment = [
+        {
+          name  = "AWS_ALB_DNS"
+          value = tostring(var.alb_dns)
+        },
+        {
+          name  = "REGISTRY_SERVICE_PORT"
+          value = tostring(var.registry_service_port)
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -280,6 +296,16 @@ resource "aws_ecs_task_definition" "api_gateway_ecs_task_definition" {
     {
       name  = var.api_gateway_name
       image = var.api_gateway_repository_url
+      environment = [
+        {
+          name  = "AWS_ALB_DNS"
+          value = tostring(var.alb_dns)
+        },
+        {
+          name  = "REGISTRY_SERVICE_PORT"
+          value = tostring(var.registry_service_port)
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
