@@ -8,7 +8,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 }
 
 resource "aws_ecs_cluster_capacity_providers" "ecs_cluster_capacity_providers" {
-  cluster_name = aws_ecs_cluster.ecs_cluster.name
+  cluster_name       = aws_ecs_cluster.ecs_cluster.name
   capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 
   default_capacity_provider_strategy {
@@ -32,8 +32,8 @@ resource "aws_ecs_task_definition" "zipkin_ecs_task_definition" {
 
   container_definitions = jsonencode([
     {
-      name         = var.zipkin_name
-      image        = var.zipkin_repository_url
+      name  = var.zipkin_name
+      image = var.zipkin_repository_url
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -91,8 +91,8 @@ resource "aws_ecs_task_definition" "web_server_ecs_task_definition" {
 
   container_definitions = jsonencode([
     {
-      name         = var.web_server_name
-      image        = var.web_server_repository_url
+      name  = var.web_server_name
+      image = var.web_server_repository_url
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -150,8 +150,8 @@ resource "aws_ecs_task_definition" "registry_service_ecs_task_definition" {
 
   container_definitions = jsonencode([
     {
-      name         = var.registry_service_name
-      image        = var.registry_service_repository_url
+      name  = var.registry_service_name
+      image = var.registry_service_repository_url
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -209,8 +209,8 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
 
   container_definitions = jsonencode([
     {
-      name         = var.config_server_name
-      image        = var.config_server_repository_url
+      name  = var.config_server_name
+      image = var.config_server_repository_url
       environment = [
         {
           name  = "AWS_ALB_DNS"
@@ -278,8 +278,8 @@ resource "aws_ecs_task_definition" "api_gateway_ecs_task_definition" {
 
   container_definitions = jsonencode([
     {
-      name         = var.api_gateway_name
-      image        = var.api_gateway_repository_url
+      name  = var.api_gateway_name
+      image = var.api_gateway_repository_url
       logConfiguration = {
         logDriver = "awslogs"
         options = {
