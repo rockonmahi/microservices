@@ -237,12 +237,16 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
           value = tostring(var.alb_dns)
         },
         {
+          name  = "REGISTRY_SERVICE_PORT"
+          value = tostring(var.registry_service_port)
+        },
+        {
           name  = "CONFIG_SERVER_PORT"
           value = tostring(var.config_server_port)
         },
         {
-          name  = "REGISTRY_SERVICE_PORT"
-          value = tostring(var.registry_service_port)
+          name  = "API_GATEWAY_PORT"
+          value = tostring(var.api_gateway_port)
         },
         {
           name  = "ZIPKIN_PORT"

@@ -1,5 +1,5 @@
 server:
-  port: 5114
+  port: ${API_GATEWAY_PORT}
 eureka:
   client:
     serviceUrl:
