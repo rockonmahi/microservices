@@ -4,6 +4,9 @@ variable "project_name" {
 variable "vpc_id" {
 }
 
+variable "zipkin_port" {
+}
+
 variable "web_server_port" {
 }
 
