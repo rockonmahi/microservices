@@ -2,6 +2,10 @@ output "alb_dns" {
   value = aws_lb.alb.dns_name
 }
 
+output "zipkin_alb_target_group_arn" {
+  value = aws_lb_target_group.zipkin_alb_target_group.arn
+}
+
 output "web_server_alb_target_group_arn" {
   value = aws_lb_target_group.web_server_alb_target_group.arn
 }

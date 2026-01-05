@@ -10,6 +10,35 @@ resource "aws_lb" "alb" {
   }
 }
 
+resource "aws_lb_target_group" "zipkin_alb_target_group" {
+  name        = "${var.project_name}-alb-tg-zipkin"
+  port        = var.zipkin_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  tags = {
+    Name        = "${var.project_name}-alb-tg-zipkin"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_lb_listener" "zipkin_alb_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = var.zipkin_port
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web_server_alb_target_group.arn
+  }
+
+  tags = {
+    Name        = "${var.project_name}-alb-listener-zipkin"
+    Environment = var.project_name
+  }
+}
+
 resource "aws_lb_target_group" "web_server_alb_target_group" {
   name        = "${var.project_name}-alb-tg-web-server"
   port        = var.web_server_port

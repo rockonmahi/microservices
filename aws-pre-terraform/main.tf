@@ -4,13 +4,13 @@ module "vpc" {
 }
 
 module "security" {
-  source           = "./modules/security"
-  project_name     = var.project_name
-  vpc_id           = module.vpc.vpc_id
-  web_server_port  = module.ecs.web_server_port
+  source                = "./modules/security"
+  project_name          = var.project_name
+  vpc_id                = module.vpc.vpc_id
+  web_server_port       = module.ecs.web_server_port
   registry_service_port = module.ecs.registry_service_port
   config_server_port    = module.ecs.config_server_port
-  api_gateway_port = module.ecs.api_gateway_port
+  api_gateway_port      = module.ecs.api_gateway_port
 }
 
 module "alb" {
@@ -19,6 +19,7 @@ module "alb" {
   vpc_id                = module.vpc.vpc_id
   subnets               = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
   alb_sg_id             = module.security.alb_sg_id
+  zipkin_port           = module.ecs.zipkin_port
   web_server_port       = module.ecs.web_server_port
   registry_service_port = module.ecs.registry_service_port
   config_server_port    = module.ecs.config_server_port
@@ -26,8 +27,8 @@ module "alb" {
 }
 
 module "cloudwatch" {
-  source                = "./modules/cloudwatch"
-  project_name          = var.project_name
+  source       = "./modules/cloudwatch"
+  project_name = var.project_name
 }
 
 module "iam" {
@@ -38,6 +39,7 @@ module "iam" {
 module "ecr" {
   source                     = "./modules/ecr"
   project_name               = var.project_name
+  zipkin_repo_name           = "${var.project_name}-zipkin-repo"
   web_server_repo_name       = "${var.project_name}-web-server-repo"
   registry_service_repo_name = "${var.project_name}-registry-service-repo"
   config_server_repo_name    = "${var.project_name}-config-server-repo"
@@ -49,25 +51,29 @@ module "ecs" {
   project_name                          = var.project_name
   aws_region                            = var.aws_region
   cluster_name                          = "${var.project_name}-microservice-ecs-cluster"
+  zipkin_port                           = 9411
+  zipkin_name                           = "${var.project_name}-zipkin"
+  zipkin_alb_target_group_arn           = module.alb.zipkin_alb_target_group_arn
+  zipkin_repository_url                 = module.ecr.zipkin_ecr_repository_url
   web_server_port                       = 80
   web_server_name                       = "${var.project_name}-web-server"
+  web_server_alb_target_group_arn       = module.alb.web_server_alb_target_group_arn
+  web_server_repository_url             = module.ecr.web_server_ecr_repository_url
   registry_service_port                 = 5112
   registry_service_name                 = "${var.project_name}-registry-service"
+  registry_service_alb_target_group_arn = module.alb.registry_service_alb_target_group_arn
+  registry_service_repository_url       = module.ecr.registry_service_ecr_repository_url
   config_server_port                    = 5113
   config_server_name                    = "${var.project_name}-config-server"
+  config_server_alb_target_group_arn    = module.alb.config_server_alb_target_group_arn
+  config_server_repository_url          = module.ecr.config_server_ecr_repository_url
   api_gateway_port                      = 5114
   api_gateway_name                      = "${var.project_name}-api-gateway"
+  api_gateway_alb_target_group_arn      = module.alb.api_gateway_alb_target_group_arn
+  api_gateway_repository_url            = module.ecr.api_gateway_ecr_repository_url
   cloudwatch_log_group_name             = module.cloudwatch.cloudwatch_log_group_name
   private_subnets                       = module.vpc.private_subnet_1a_id
   ecs_sg_id                             = module.security.ecs_sg_id
-  web_server_alb_target_group_arn       = module.alb.web_server_alb_target_group_arn
-  web_server_repository_url             = module.ecr.web_server_ecr_repository_url
-  registry_service_alb_target_group_arn = module.alb.registry_service_alb_target_group_arn
-  registry_service_repository_url       = module.ecr.registry_service_ecr_repository_url
-  config_server_alb_target_group_arn    = module.alb.config_server_alb_target_group_arn
-  config_server_repository_url          = module.ecr.config_server_ecr_repository_url
-  api_gateway_alb_target_group_arn      = module.alb.api_gateway_alb_target_group_arn
-  api_gateway_repository_url            = module.ecr.api_gateway_ecr_repository_url
   ecs_execution_role                    = module.iam.ecs_execution_role
 }
 

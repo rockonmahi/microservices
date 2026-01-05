@@ -1,6 +1,9 @@
 variable "project_name" {
 }
 
+variable "zipkin_repo_name" {
+}
+
 variable "web_server_repo_name" {
 }
 

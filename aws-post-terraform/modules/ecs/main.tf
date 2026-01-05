@@ -17,6 +17,65 @@ resource "aws_ecs_cluster_capacity_providers" "ecs_cluster_capacity_providers" {
   }
 }
 
+resource "aws_ecs_task_definition" "zipkin_ecs_task_definition" {
+  family                   = var.zipkin_name
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 1024
+  memory                   = 3072
+  execution_role_arn       = var.ecs_execution_role
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+
+  container_definitions = jsonencode([
+    {
+      name         = var.zipkin_name
+      image        = var.zipkin_repository_url
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = var.cloudwatch_log_group_name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
+      portMappings = [{ containerPort = var.zipkin_port }]
+    }
+  ])
+
+  tags = {
+    Name        = "${var.project_name}-ecs-task-definition-zipkin"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_ecs_service" "zepkin_ecs_service" {
+  name            = "${var.project_name}-${var.zipkin_name}"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
+  task_definition = aws_ecs_task_definition.zipkin_ecs_task_definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets         = [var.private_subnets]
+    security_groups = [var.ecs_sg_id]
+  }
+
+  load_balancer {
+    target_group_arn = var.zipkin_alb_target_group_arn
+    container_name   = var.zipkin_name
+    container_port   = var.zipkin_port
+  }
+
+  tags = {
+    Name        = "${var.project_name}-ecs-service-zipkin"
+    Environment = var.project_name
+  }
+}
+
 resource "aws_ecs_task_definition" "web_server_ecs_task_definition" {
   family                   = var.web_server_name
   network_mode             = "awsvpc"

@@ -1,3 +1,12 @@
+resource "aws_ecr_repository" "zipkin_ecr_repository" {
+  name = var.zipkin_repo_name
+
+  tags = {
+    Name        = "${var.project_name}-ecr-zipkin"
+    Environment = var.project_name
+  }
+}
+
 resource "aws_ecr_repository" "web_server_ecr_repository" {
   name = var.web_server_repo_name
 

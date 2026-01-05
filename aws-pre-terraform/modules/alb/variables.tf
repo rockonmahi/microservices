@@ -10,6 +10,9 @@ variable "subnets" {
 variable "alb_sg_id" {
 }
 
+variable "zipkin_port" {
+}
+
 variable "web_server_port" {
 }
 

@@ -6,6 +6,10 @@ output "cluster_arn" {
   value = aws_ecs_cluster.ecs_cluster.arn
 }
 
+output "zipkin_port" {
+  value = var.zipkin_port
+}
+
 output "web_server_port" {
   value = var.web_server_port
 }

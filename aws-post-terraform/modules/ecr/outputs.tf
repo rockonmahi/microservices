@@ -1,3 +1,7 @@
+output "zipkin_ecr_repository_url" {
+  value = aws_ecr_repository.zipkin_ecr_repository.repository_url
+}
+
 output "web_server_ecr_repository_url" {
   value = aws_ecr_repository.web_server_ecr_repository.repository_url
 }

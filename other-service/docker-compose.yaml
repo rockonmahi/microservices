@@ -1,5 +1,4 @@
 services:
-
   mysqldb:
     container_name: mysqldb
     image: mysql:5.7
@@ -61,9 +60,17 @@ services:
     networks:
       - escola-network
           #ipv4_address: 172.52.2.5
+  zipkin:
+    container_name: zipkin
+    build:
+      context: ./zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - escola-network
+      #ipv4_address: 172.52.2.11
 networks:
   escola-network:
     external: true
-
 volumes:
   db:
