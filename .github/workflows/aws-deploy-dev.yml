@@ -42,7 +42,6 @@ jobs:
 
       - name: Pre Terraform Apply
         working-directory: ./aws-pre-terraform
-        if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
 
       - name: Configure AWS credentials
@@ -114,5 +113,4 @@ jobs:
 
       - name: Post Terraform Apply
         working-directory: ./aws-post-terraform
-        if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
