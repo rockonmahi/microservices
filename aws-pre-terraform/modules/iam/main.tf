@@ -27,8 +27,8 @@ resource "aws_iam_role" "github_actions" {
         },
         "StringLike" : {
           "token.actions.githubusercontent.com:sub" : [
-            "repo:rockonmahi/microservice:ref:refs/heads/main",
-            "repo:rockonmahi/microservice:ref:refs/heads/main"
+            "repo:rockonmahi/microservices:ref:refs/heads/main",
+            "repo:rockonmahi/microservices:ref:refs/heads/main"
           ]
         }
       }
