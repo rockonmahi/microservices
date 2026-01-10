@@ -118,7 +118,7 @@ resource "aws_lb_listener_rule" "registry_service_listener_rule" {
 
   condition {
     path_pattern {
-      values = ["/registry-service/*"]
+      values = ["/registry-service","/registry-service/*"]
     }
   }
 }
