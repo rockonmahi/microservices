@@ -20,7 +20,7 @@ resource "aws_lb_target_group" "zipkin_alb_target_group" {
   health_check {
     enabled             = true
     path                = "/zipkin/"
-    port                = var.web_server_port
+    port                = var.zipkin_port
     protocol            = "HTTP"
     matcher             = "200"
     interval            = 30
