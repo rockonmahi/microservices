@@ -12,16 +12,16 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class ServiceBusConfig {
 
-  @Value("${azure.servicebus.connections.queue.listener.connection}")
+  @Value("${azure.services.connections.queue.listener.connection}")
   private String listenerQueueConnection;
 
-  @Value("${azure.servicebus.connections.queue.sender.connection}")
+  @Value("${azure.services.connections.queue.sender.connection}")
   private String senderQueueConnection;
 
-  @Value("${azure.servicebus.connections.queue.listener.queue}")
+  @Value("${azure.services.connections.queue.listener.queue}")
   private String listenerQueue;
 
-  @Value("${azure.servicebus.connections.queue.sender.queue}")
+  @Value("${azure.services.connections.queue.sender.queue}")
   private String senderQueue;
 
   //Topic

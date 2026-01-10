@@ -1,4 +1,6 @@
 server:
+  servlet:
+    context-path: /event-service
   port: 6118
 spring:
   application:
@@ -9,7 +11,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:6112/eureka/
+      defaultZone: http://localhost:6112/registry-service/eureka/
 management:
   tracing:
     sampling:
@@ -22,10 +24,8 @@ logging:
     org:
       springframework:
         security: TRACE
-  pattern:
-    console: %green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n
 azure:
-  servicebus:
+  services:
     connections:
       topic:
         listener:

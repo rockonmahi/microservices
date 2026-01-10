@@ -2,4 +2,4 @@ spring:
   application:
     name: saml2-server
   config:
-    import: optional:configserver:http://config-server:5113
+    import: optional:configserver:http://config-server:5113/config-server

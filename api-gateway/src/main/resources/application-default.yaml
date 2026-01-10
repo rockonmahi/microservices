@@ -1,9 +1,11 @@
 server:
+  servlet:
+    context-path: /authentication-server
   port: 6114
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:6112/eureka/
+      defaultZone: http://localhost:6112/registry-service/eureka/
 management:
   tracing:
     sampling:
@@ -16,8 +18,6 @@ logging:
     org:
       springframework:
         security: "TRACE"
-  pattern:
-    console: %green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n
 spring:
   application:
     name: api-gateway

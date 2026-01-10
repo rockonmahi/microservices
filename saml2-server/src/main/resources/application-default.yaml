@@ -1,4 +1,6 @@
 server:
+  servlet:
+    context-path: /saml2-server
   port: 6117
 spring:
   application:
@@ -31,7 +33,7 @@ logging:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:6112/eureka/
+      defaultZone: http://localhost:6112/registry-service/eureka/
 management:
   tracing:
     sampling:
