@@ -12,7 +12,7 @@ resource "aws_lb" "alb" {
 
 resource "aws_lb_target_group" "zipkin_alb_target_group" {
   name        = "${var.project_name}-alb-tg-zipkin"
-  port        = c
+  port        = var.zipkin_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
