@@ -10,4 +10,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${AWS_ALB_DNS:}:${REGISTRY_SERVICE_PORT}/registry-service/eureka
+      defaultZone: http://${AWS_ALB_DNS:}/registry-service/eureka

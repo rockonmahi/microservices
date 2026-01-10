@@ -2,4 +2,4 @@ spring:
   application:
     name: authentication-server
   config:
-    import: optional:configserver:http://${AWS_ALB_DNS}:${CONFIG_SERVER_PORT}/config-server
+    import: optional:configserver:http://${AWS_ALB_DNS}/config-server

@@ -23,15 +23,15 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          jwk-set-uri: "http://authentication-server:5115/authentication-server/oauth2/jwks"
+          jwk-set-uri: "http://${AWS_ALB_DNS}/authentication-server/oauth2/jwks"
         opaque:
-          introspection-uri: "http://authentication-server:5115/authentication-server/oauth2/introspect"
+          introspection-uri: "http://${AWS_ALB_DNS}/authentication-server/oauth2/introspect"
           introspection-client-id: "clientCredentialsReference"
           introspection-client-secret: "c1BK9Bg2REeydBbvUoUeKCbD2bvJzXGj"
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${AWS_ALB_DNS}:${REGISTRY_SERVICE_PORT}/registry-service/eureka
+      defaultZone: http://${AWS_ALB_DNS}/registry-service/eureka
 management:
   tracing:
     sampling:

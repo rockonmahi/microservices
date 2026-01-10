@@ -109,7 +109,7 @@ resource "aws_lb_listener" "web_server_alb_listener" {
 
 resource "aws_lb_listener_rule" "registry_service_listener_rule" {
   listener_arn = aws_lb_listener.web_server_alb_listener.arn
-  priority     = 10
+  priority     = 12
 
   action {
     type             = "forward"
@@ -119,6 +119,38 @@ resource "aws_lb_listener_rule" "registry_service_listener_rule" {
   condition {
     path_pattern {
       values = ["/registry-service","/registry-service/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "config_server_listener_rule" {
+  listener_arn = aws_lb_listener.web_server_alb_listener.arn
+  priority     = 13
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.config_server_alb_target_group.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/config-server","/config-server/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "api_gateway_listener_rule" {
+  listener_arn = aws_lb_listener.web_server_alb_listener.arn
+  priority     = 14
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.api_gateway_alb_target_group.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api-gateway","/api-gateway/*"]
     }
   }
 }
