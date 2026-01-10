@@ -12,10 +12,22 @@ resource "aws_lb" "alb" {
 
 resource "aws_lb_target_group" "zipkin_alb_target_group" {
   name        = "${var.project_name}-alb-tg-zipkin"
-  port        = var.zipkin_port
+  port        = c
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
+
+  health_check {
+    enabled             = true
+    path                = "/zipkin/"
+    port                = var.web_server_port
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
 
   tags = {
     Name        = "${var.project_name}-alb-tg-zipkin"
@@ -30,6 +42,18 @@ resource "aws_lb_target_group" "web_server_alb_target_group" {
   vpc_id      = var.vpc_id
   target_type = "ip"
 
+  health_check {
+    enabled             = true
+    path                = "/"
+    port                = var.web_server_port
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
   tags = {
     Name        = "${var.project_name}-alb-tg-web-server"
     Environment = var.project_name
@@ -42,6 +66,18 @@ resource "aws_lb_target_group" "registry_service_alb_target_group" {
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
+
+  health_check {
+    enabled             = true
+    path                = "/registry-service"
+    port                = var.registry_service_port
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
 
   tags = {
     Name        = "${var.project_name}-alb-tg-registry-service"
@@ -56,6 +92,18 @@ resource "aws_lb_target_group" "config_server_alb_target_group" {
   vpc_id      = var.vpc_id
   target_type = "ip"
 
+  health_check {
+    enabled             = true
+    path                = "/config-server"
+    port                = var.config_server_port
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
   tags = {
     Name        = "${var.project_name}-alb-tg-config-server"
     Environment = var.project_name
@@ -68,6 +116,18 @@ resource "aws_lb_target_group" "api_gateway_alb_target_group" {
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
+
+  health_check {
+    enabled             = true
+    path                = "/api-gateway"
+    port                = var.api_gateway_port
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
 
   tags = {
     Name        = "${var.project_name}-alb-tg-api-gateway"
