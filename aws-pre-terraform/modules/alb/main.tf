@@ -20,7 +20,7 @@ resource "aws_lb_target_group" "zipkin_alb_target_group" {
   health_check {
     enabled             = true
     path                = "/zipkin"
-    port                = var.zipkin_port
+    port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
     interval            = 30
@@ -45,7 +45,7 @@ resource "aws_lb_target_group" "web_server_alb_target_group" {
   health_check {
     enabled             = true
     path                = "/"
-    port                = var.web_server_port
+    port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
     interval            = 30
@@ -70,7 +70,7 @@ resource "aws_lb_target_group" "registry_service_alb_target_group" {
   health_check {
     enabled             = true
     path                = "/registry-service/heath"
-    port                = var.registry_service_port
+    port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
     interval            = 30
@@ -95,7 +95,7 @@ resource "aws_lb_target_group" "config_server_alb_target_group" {
   health_check {
     enabled             = true
     path                = "/config-server/heath"
-    port                = var.config_server_port
+    port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
     interval            = 30
@@ -120,7 +120,7 @@ resource "aws_lb_target_group" "api_gateway_alb_target_group" {
   health_check {
     enabled             = true
     path                = "/api-gateway/heath"
-    port                = var.api_gateway_port
+    port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
     interval            = 30
