@@ -13,6 +13,11 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:6112/registry-service/eureka/
 management:
+  endpoints:
+    web:
+      base-path: /event-service
+      exposure:
+        include: health
   tracing:
     sampling:
       probability: 1.0

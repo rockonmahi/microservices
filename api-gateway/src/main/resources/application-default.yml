@@ -1,12 +1,17 @@
 server:
   servlet:
-    context-path: /authentication-server
+    context-path: /api-gateway
   port: 6114
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:6112/registry-service/eureka/
 management:
+  endpoints:
+    web:
+      base-path: /api-gateway
+      exposure:
+        include: health
   tracing:
     sampling:
       probability: 1.0

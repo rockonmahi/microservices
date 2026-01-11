@@ -35,6 +35,11 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:6112/registry-service/eureka/
 management:
+  endpoints:
+    web:
+      base-path: /saml2-server
+      exposure:
+        include: health
   tracing:
     sampling:
       probability: 1.0

@@ -33,6 +33,11 @@ eureka:
     serviceUrl:
       defaultZone: http://${AWS_ALB_DNS}/registry-service/eureka
 management:
+  endpoints:
+    web:
+      base-path: /user-service
+      exposure:
+        include: health
   tracing:
     sampling:
       probability: 1.0

@@ -7,6 +7,15 @@ spring:
     active: native
   application:
     name: config-server
+management:
+  endpoints:
+    web:
+      base-path: /config-server
+      exposure:
+        include: health
+  tracing:
+    sampling:
+      probability: 1.0
 eureka:
   client:
     serviceUrl:

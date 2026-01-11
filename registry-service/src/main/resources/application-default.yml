@@ -5,6 +5,15 @@ server:
 spring:
   application:
     name: registry-service
+management:
+  endpoints:
+    web:
+      base-path: /registry-service
+      exposure:
+        include: health
+  tracing:
+    sampling:
+      probability: 1.0
 eureka:
   instance:
     hostname: localhost
