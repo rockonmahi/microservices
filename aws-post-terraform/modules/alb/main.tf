@@ -69,7 +69,7 @@ resource "aws_lb_target_group" "registry_service_alb_target_group" {
 
   health_check {
     enabled             = true
-    path                = "/registry-service/heath"
+    path                = "/registry-service/health"
     port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
@@ -94,7 +94,7 @@ resource "aws_lb_target_group" "config_server_alb_target_group" {
 
   health_check {
     enabled             = true
-    path                = "/config-server/heath"
+    path                = "/config-server/actuator/health"
     port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
@@ -119,7 +119,7 @@ resource "aws_lb_target_group" "api_gateway_alb_target_group" {
 
   health_check {
     enabled             = true
-    path                = "/api-gateway/heath"
+    path                = "/api-gateway/health"
     port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
