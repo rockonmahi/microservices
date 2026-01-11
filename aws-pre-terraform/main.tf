@@ -37,6 +37,15 @@ module "iam" {
   project_name = var.project_name
 }
 
+module "rds" {
+  source       = "./modules/rds"
+  project_name = var.project_name
+  rds_sg_id    = module.security.rds_sg_id
+  public_subnet_1a_id = module.vpc.public_subnet_1a_id
+  db_username  = "testuser"
+  db_password  = "testpass"
+}
+
 module "ecr" {
   source                     = "./modules/ecr"
   project_name               = var.project_name

@@ -29,6 +29,15 @@ output "ecs_cluster_name" {
 output "ecs_cluster_arn" {
   value = module.ecs.cluster_arn
 }
+
+output "rds_endpoint" {
+  value = module.rds.rds_endpoint
+}
+
+output "rds_port" {
+  value = module.rds.rds_port
+}
+
 /*
 output "eks_cluster_name" {
   value = module.eks.cluster_name

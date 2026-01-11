@@ -120,4 +120,3 @@ public class Saml2Filter extends OncePerRequestFilter {
         }
     }
 }
-

@@ -29,15 +29,13 @@ public class Saml2Bean {
 
     @Bean
     public Saml2Filter saml2Filter() {
-        Saml2Filter filter = new Saml2Filter(
+        return new Saml2Filter(
                 (RelyingPartyRegistrationResolver) new DefaultRelyingPartyRegistrationResolver(this.relyingPartyRegistrationRepository),
                 new OpenSamlMetadataResolver());
-        return filter;
     }
 
     @Bean
     public OpenSaml4AuthenticationProvider samlAuthProv() {
-
         Converter<OpenSaml4AuthenticationProvider.ResponseToken, Saml2Authentication> authConvertor
                 = OpenSaml4AuthenticationProvider.createDefaultResponseAuthenticationConverter();
 
@@ -59,7 +57,6 @@ public class Saml2Bean {
 
         return samlAuthProv;
     }
-
 
     private static Converter<Assertion, Collection<? extends GrantedAuthority>> authoritiesExtractor() {
         Converter<Assertion, Collection<? extends GrantedAuthority>> authoritiesExtractor = assertion -> {

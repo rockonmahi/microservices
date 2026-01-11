@@ -33,7 +33,6 @@ public class SecurityConfig {
 					.requestMatchers("/","/favicon.ico","/css/**","/error").permitAll()
 					.requestMatchers( "/carsonline", "/buy/**", "/user")
 					.authenticated());
- 
 		return http.build();
 	}
 }
