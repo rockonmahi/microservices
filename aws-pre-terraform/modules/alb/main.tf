@@ -19,7 +19,7 @@ resource "aws_lb_target_group" "zipkin_alb_target_group" {
 
   health_check {
     enabled             = true
-    path                = "/zipkin"
+    path                = "/actuator/health"
     port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
