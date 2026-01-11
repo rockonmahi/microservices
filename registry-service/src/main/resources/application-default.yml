@@ -8,7 +8,6 @@ spring:
 management:
   endpoints:
     web:
-      base-path: /registry-service
       exposure:
         include: health
   tracing:
