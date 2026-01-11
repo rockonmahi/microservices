@@ -7,6 +7,9 @@ variable "rds_sg_id" {
 variable "public_subnet_1a_id" {
 }
 
+variable "db_name" {
+}
+
 variable "db_username" {
 }
 
