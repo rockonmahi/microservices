@@ -69,7 +69,7 @@ resource "aws_lb_target_group" "registry_service_alb_target_group" {
 
   health_check {
     enabled             = true
-    path                = "/registry-service/health"
+    path                = "/registry-service/actuator/health"
     port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
