@@ -50,12 +50,6 @@ jobs:
           echo "AWS_CONFIG_SERVER_ECR_REPO_URL=$(terraform output -raw config_server_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_API_GATEWAY_ECR_REPO_URL=$(terraform output -raw api_gateway_ecr_repository_url)" >> $GITHUB_ENV
 
-      - name: Debug ECR URL
-        run: |
-          terraform output
-          echo terraform output -raw zipkin_ecr_repository_url
-          echo "ZIPKIN ECR URL = ${{env.AWS_ZIPKIN_ECR_REPO_URL}}"
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -77,38 +71,38 @@ jobs:
 
       - name: Build web-server Image
         working-directory: ./web-server
-        #env:
-          #WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_WEB_SERVER_ECR_REPO}}:latest
+        env:
+          WEB_SERVER_IMAGE_URI: ${{env.AWS_WEB_SERVER_ECR_REPO_URL}}:latest
         run: |
-          docker build -t $AWS_WEB_SERVER_ECR_REPO_URL .
-          docker push $AWS_WEB_SERVER_ECR_REPO_URL
+          docker build -t $WEB_SERVER_IMAGE_URI .
+          docker push $WEB_SERVER_IMAGE_URI
 
       - name: Build registry-service Image
         working-directory: ./registry-service
-        #env:
-          #REGISTRY_SERVICE_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_REGISTRY_SERVICE_ECR_REPO}}:latest
+        env:
+          REGISTRY_SERVICE_IMAGE_URI: ${{env.AWS_WEB_SERVER_ECR_REPO_URL}}:latest
         run: |
           mvn clean install -DskipTests
-          docker build -t $AWS_REGISTRY_SERVICE_ECR_REPO_URL .
-          docker push $AWS_REGISTRY_SERVICE_ECR_REPO_URL
+          docker build -t $REGISTRY_SERVICE_IMAGE_URI .
+          docker push $REGISTRY_SERVICE_IMAGE_URI
 
       - name: Build config-server Image
         working-directory: ./config-server
-        #env:
-          #CONFIG_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_CONFIG_SERVER_ECR_REPO}}:latest
+        env:
+          CONFIG_SERVER_IMAGE_URI: ${{env.AWS_CONFIG_SERVER_ECR_REPO_URL}}:latest
         run: |
           mvn clean install -DskipTests
-          docker build -t $AWS_CONFIG_SERVER_ECR_REPO_URL .
-          docker push $AWS_CONFIG_SERVER_ECR_REPO_URL
+          docker build -t $CONFIG_SERVER_IMAGE_URI .
+          docker push $CONFIG_SERVER_IMAGE_URI
 
       - name: Build api-gateway Image
         working-directory: ./api-gateway
-        #env:
-          #API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
+        env:
+          API_GATEWAY_IMAGE_URI: ${{env.AWS_API_GATEWAY_ECR_REPO_URL}}:latest
         run: |
           mvn clean install -DskipTests
-          docker build -t $AWS_API_GATEWAY_ECR_REPO_URL .
-          docker push $AWS_API_GATEWAY_ECR_REPO_URL
+          docker build -t $API_GATEWAY_IMAGE_URI .
+          docker push $API_GATEWAY_IMAGE_URI
 
       - name: Post Terraform Init
         working-directory: ./aws-post-terraform
