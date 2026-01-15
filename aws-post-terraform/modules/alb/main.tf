@@ -178,7 +178,7 @@ resource "aws_lb_listener_rule" "registry_service_listener_rule" {
 
   condition {
     path_pattern {
-      values = ["/registry-service","/registry-service/*"]
+      values = ["/registry-service", "/registry-service/*"]
     }
   }
 }
@@ -194,7 +194,7 @@ resource "aws_lb_listener_rule" "config_server_listener_rule" {
 
   condition {
     path_pattern {
-      values = ["/config-server","/config-server/*"]
+      values = ["/config-server", "/config-server/*"]
     }
   }
 }
@@ -210,7 +210,7 @@ resource "aws_lb_listener_rule" "api_gateway_listener_rule" {
 
   condition {
     path_pattern {
-      values = ["/api-gateway","/api-gateway/*"]
+      values = ["/api-gateway", "/api-gateway/*"]
     }
   }
 }

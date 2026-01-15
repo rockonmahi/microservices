@@ -38,13 +38,13 @@ module "iam" {
 }
 
 module "rds" {
-  source              = "./modules/rds"
-  project_name        = var.project_name
-  rds_sg_id           = module.security.rds_sg_id
-  subnets               = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
-  db_name             = "login"
-  db_username         = "testuser"
-  db_password         = "testpass"
+  source       = "./modules/rds"
+  project_name = var.project_name
+  rds_sg_id    = module.security.rds_sg_id
+  subnets      = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
+  db_name      = "login"
+  db_username  = "testuser"
+  db_password  = "testpass"
 }
 
 module "ecr" {
