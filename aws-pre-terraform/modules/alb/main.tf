@@ -1,104 +1,216 @@
-resource "aws_security_group" "alb_sg" {
-  name        = "${var.project_name}-alb-sg"
-  description = "${var.project_name} security group for alb"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = var.zipkin_port
-    to_port     = var.zipkin_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = var.web_server_port
-    to_port     = var.web_server_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_lb" "alb" {
+  name               = "${var.project_name}-alb"
+  load_balancer_type = "application"
+  subnets            = var.subnets
+  security_groups    = [var.alb_sg_id]
 
   tags = {
-    Name        = "${var.project_name}-alb-sg"
+    Name        = "${var.project_name}-alb"
     Environment = var.project_name
   }
 }
 
-resource "aws_security_group" "ecs_sg" {
-  name        = "${var.project_name}-ecs-sg"
-  description = "${var.project_name} security group for ecs"
+resource "aws_lb_target_group" "zipkin_alb_target_group" {
+  name        = "${var.project_name}-alb-tg-zipkin"
+  port        = var.zipkin_port
+  protocol    = "HTTP"
   vpc_id      = var.vpc_id
+  target_type = "ip"
 
-  ingress {
-    from_port       = var.zipkin_port
-    to_port         = var.zipkin_port
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]
-  }
-  ingress {
-    from_port       = var.web_server_port
-    to_port         = var.web_server_port
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]
-  }
-  ingress {
-    from_port       = var.registry_service_port
-    to_port         = var.registry_service_port
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]
-  }
-  ingress {
-    from_port       = var.config_server_port
-    to_port         = var.config_server_port
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]
-  }
-  ingress {
-    from_port       = var.api_gateway_port
-    to_port         = var.api_gateway_port
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  health_check {
+    enabled             = true
+    path                = "/actuator/health"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
   }
 
   tags = {
-    Name        = "${var.project_name}-ecs-sg"
+    Name        = "${var.project_name}-alb-tg-zipkin"
     Environment = var.project_name
   }
 }
 
-resource "aws_security_group" "rds_sg" {
-  name        = "${var.project_name}-mysql-rds-sg"
-  description = "${var.project_name} security group for rds"
+resource "aws_lb_target_group" "web_server_alb_target_group" {
+  name        = "${var.project_name}-alb-tg-web-server"
+  port        = var.web_server_port
+  protocol    = "HTTP"
   vpc_id      = var.vpc_id
+  target_type = "ip"
 
-  ingress {
-    description = "MySQL"
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    #security_groups = [aws_security_group.ecs_sg.id]
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  health_check {
+    enabled             = true
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
   }
 
   tags = {
-    Name        = "${var.project_name}-mysql-rds-sg"
+    Name        = "${var.project_name}-alb-tg-web-server"
     Environment = var.project_name
+  }
+}
+
+resource "aws_lb_target_group" "registry_service_alb_target_group" {
+  name        = "${var.project_name}-alb-tg-registry-service"
+  port        = var.registry_service_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  health_check {
+    enabled             = true
+    path                = "/registry-service/actuator/health"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name        = "${var.project_name}-alb-tg-registry-service"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_lb_target_group" "config_server_alb_target_group" {
+  name        = "${var.project_name}-alb-tg-config-server"
+  port        = var.config_server_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  health_check {
+    enabled             = true
+    path                = "/config-server/actuator/health"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name        = "${var.project_name}-alb-tg-config-server"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_lb_target_group" "api_gateway_alb_target_group" {
+  name        = "${var.project_name}-alb-tg-api-gateway"
+  port        = var.api_gateway_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  health_check {
+    enabled             = true
+    path                = "/api-gateway/health"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name        = "${var.project_name}-alb-tg-api-gateway"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_lb_listener" "zipkin_alb_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = var.zipkin_port
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.zipkin_alb_target_group.arn
+  }
+
+  tags = {
+    Name        = "${var.project_name}-alb-listener-zipkin"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_lb_listener" "web_server_alb_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = var.web_server_port
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web_server_alb_target_group.arn
+  }
+
+  tags = {
+    Name        = "${var.project_name}-alb-listener-web-server"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_lb_listener_rule" "registry_service_listener_rule" {
+  listener_arn = aws_lb_listener.web_server_alb_listener.arn
+  priority     = 12
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.registry_service_alb_target_group.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/registry-service", "/registry-service/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "config_server_listener_rule" {
+  listener_arn = aws_lb_listener.web_server_alb_listener.arn
+  priority     = 13
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.config_server_alb_target_group.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/config-server", "/config-server/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "api_gateway_listener_rule" {
+  listener_arn = aws_lb_listener.web_server_alb_listener.arn
+  priority     = 14
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.api_gateway_alb_target_group.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api-gateway", "/api-gateway/*"]
+    }
   }
 }
