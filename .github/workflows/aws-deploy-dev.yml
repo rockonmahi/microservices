@@ -53,7 +53,7 @@ jobs:
       - name: Debug ECR URL
         run: |
           terraform output
-          terraform output -raw zipkin_ecr_repository_url
+          echo terraform output -raw zipkin_ecr_repository_url
           echo "ZIPKIN ECR URL = '$AWS_ZIPKIN_ECR_REPO_URL'"
 
       - name: Configure AWS credentials
