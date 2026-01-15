@@ -52,6 +52,8 @@ jobs:
 
       - name: Debug ECR URL
         run: |
+          terraform output
+          terraform output -raw zipkin_ecr_repository_url
           echo "ZIPKIN ECR URL = '$AWS_ZIPKIN_ECR_REPO_URL'"
 
       - name: Configure AWS credentials
@@ -66,11 +68,12 @@ jobs:
 
       - name: Build zipkin Image
         working-directory: ./other-service/zipkin
-        #env:
+        env:
           #ZIPKIN_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_ZIPKIN_ECR_REPO}}:latest
+          ZIPKIN_IMAGE_URI: $AWS_ZIPKIN_ECR_REPO_URL:latest
         run: |
-          docker build -t $AWS_ZIPKIN_ECR_REPO_URL .
-          docker push $AWS_ZIPKIN_ECR_REPO_URL
+          docker build -t $ZIPKIN_IMAGE_URI .
+          docker push $ZIPKIN_IMAGE_URI
 
       - name: Build web-server Image
         working-directory: ./web-server
