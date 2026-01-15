@@ -62,7 +62,7 @@ jobs:
 
       - name: Build zipkin Image
         working-directory: ./other-service/zipkin
-        env:
+        #env:
           #ZIPKIN_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_ZIPKIN_ECR_REPO}}:latest
         run: |
           docker build -t $AWS_ZIPKIN_ECR_REPO_URL .
@@ -70,7 +70,7 @@ jobs:
 
       - name: Build web-server Image
         working-directory: ./web-server
-        env:
+        #env:
           #WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_WEB_SERVER_ECR_REPO}}:latest
         run: |
           docker build -t $AWS_WEB_SERVER_ECR_REPO_URL .
@@ -78,7 +78,7 @@ jobs:
 
       - name: Build registry-service Image
         working-directory: ./registry-service
-        env:
+        #env:
           #REGISTRY_SERVICE_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_REGISTRY_SERVICE_ECR_REPO}}:latest
         run: |
           mvn clean install -DskipTests
@@ -87,7 +87,7 @@ jobs:
 
       - name: Build config-server Image
         working-directory: ./config-server
-        env:
+        #env:
           #CONFIG_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_CONFIG_SERVER_ECR_REPO}}:latest
         run: |
           mvn clean install -DskipTests
@@ -96,7 +96,7 @@ jobs:
 
       - name: Build api-gateway Image
         working-directory: ./api-gateway
-        env:
+        #env:
           #API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
         run: |
           mvn clean install -DskipTests
