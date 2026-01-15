@@ -42,7 +42,13 @@ jobs:
 
       - name: Pre Terraform Apply
         working-directory: ./aws-pre-terraform
-        run: terraform apply -auto-approve
+        run: |
+          terraform apply -auto-approve
+          AWS_ZIPKIN_ECR_REPO_URL           = $(terraform output -raw zipkin_ecr_repository_url)
+          AWS_WEB_SERVER_ECR_REPO_URL       = $(terraform output -raw web_server_ecr_repository_url)
+          AWS_REGISTRY_SERVICE_ECR_REPO_URL = $(terraform output -raw registry_service_ecr_repository_url)
+          AWS_CONFIG_SERVER_ECR_REPO_URL    = $(terraform output -raw config_server_ecr_repository_url)
+          AWS_API_GATEWAY_ECR_REPO_URL      = $(terraform output -raw api_gateway_ecr_repository_url)
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -57,47 +63,45 @@ jobs:
       - name: Build zipkin Image
         working-directory: ./other-service/zipkin
         env:
-          ZIPKIN_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_ZIPKIN_ECR_REPO}}:latest
+          #ZIPKIN_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_ZIPKIN_ECR_REPO}}:latest
         run: |
-          docker build -t $ZIPKIN_IMAGE_URI .
-          docker push $ZIPKIN_IMAGE_URI
+          docker build -t $AWS_ZIPKIN_ECR_REPO_URL .
+          docker push $AWS_ZIPKIN_ECR_REPO_URL
 
       - name: Build web-server Image
         working-directory: ./web-server
         env:
-          WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_WEB_SERVER_ECR_REPO}}:latest
+          #WEB_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_WEB_SERVER_ECR_REPO}}:latest
         run: |
-          docker build -t $WEB_SERVER_IMAGE_URI .
-          docker push $WEB_SERVER_IMAGE_URI
+          docker build -t $AWS_WEB_SERVER_ECR_REPO_URL .
+          docker push $AWS_WEB_SERVER_ECR_REPO_URL
 
       - name: Build registry-service Image
         working-directory: ./registry-service
         env:
-          REGISTRY_SERVICE_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_REGISTRY_SERVICE_ECR_REPO}}:latest
+          #REGISTRY_SERVICE_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_REGISTRY_SERVICE_ECR_REPO}}:latest
         run: |
           mvn clean install -DskipTests
-          docker build -t $REGISTRY_SERVICE_IMAGE_URI .
-          docker push $REGISTRY_SERVICE_IMAGE_URI
+          docker build -t $AWS_REGISTRY_SERVICE_ECR_REPO_URL .
+          docker push $AWS_REGISTRY_SERVICE_ECR_REPO_URL
 
       - name: Build config-server Image
         working-directory: ./config-server
         env:
-          CONFIG_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_CONFIG_SERVER_ECR_REPO}}:latest
-          ALB_URL: ${{ env.ALB_URL }}
-
+          #CONFIG_SERVER_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_CONFIG_SERVER_ECR_REPO}}:latest
         run: |
           mvn clean install -DskipTests
-          docker build -t $CONFIG_SERVER_IMAGE_URI .
-          docker push $CONFIG_SERVER_IMAGE_URI
+          docker build -t $AWS_CONFIG_SERVER_ECR_REPO_URL .
+          docker push $AWS_CONFIG_SERVER_ECR_REPO_URL
 
       - name: Build api-gateway Image
         working-directory: ./api-gateway
         env:
-          API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
+          #API_GATEWAY_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_API_GATEWAY_ECR_REPO}}:latest
         run: |
           mvn clean install -DskipTests
-          docker build -t $API_GATEWAY_IMAGE_URI .
-          docker push $API_GATEWAY_IMAGE_URI
+          docker build -t $AWS_API_GATEWAY_ECR_REPO_URL .
+          docker push $AWS_API_GATEWAY_ECR_REPO_URL
 
       - name: Post Terraform Init
         working-directory: ./aws-post-terraform

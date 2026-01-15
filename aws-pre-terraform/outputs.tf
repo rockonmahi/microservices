@@ -18,7 +18,7 @@ output "config_server_ecr_repository_url" {
   value = module.ecr.config_server_ecr_repository_url
 }
 
-output "ecr_api_gateway_repository" {
+output "api_gateway_ecr_repository_url" {
   value = module.ecr.api_gateway_ecr_repository_url
 }
 
