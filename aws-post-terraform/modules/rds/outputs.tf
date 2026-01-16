@@ -2,7 +2,7 @@ output "rds_endpoint" {
   value = aws_db_instance.mysql.endpoint
 }
 
-output "rds_port" {
+output "mysql_db_port" {
   value = aws_db_instance.mysql.port
 }
 

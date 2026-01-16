@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "mysql_subnet_group" {
   name       = "${var.project_name}-mysql-subnet-group"
-  subnet_ids = var.subnets
+  subnet_ids = var.public_subnets
 
   tags = {
     Name        = "${var.project_name}-mysql-subnet-group"

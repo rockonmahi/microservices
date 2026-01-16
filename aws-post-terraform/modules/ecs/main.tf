@@ -76,7 +76,7 @@ resource "aws_ecs_service" "mongo_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [var.private_subnets]
+    subnets         = var.private_subnets
     security_groups = [var.ecs_sg_id]
   }
 
@@ -139,7 +139,7 @@ resource "aws_ecs_service" "zipkin_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [var.private_subnets]
+    subnets         = var.private_subnets
     security_groups = [var.ecs_sg_id]
   }
 
@@ -198,7 +198,7 @@ resource "aws_ecs_service" "web_server_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [var.private_subnets]
+    subnets         = var.private_subnets
     security_groups = [var.ecs_sg_id]
   }
 
@@ -267,7 +267,7 @@ resource "aws_ecs_service" "registry_service_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [var.private_subnets]
+    subnets         = var.private_subnets
     security_groups = [var.ecs_sg_id]
   }
 
@@ -348,7 +348,7 @@ resource "aws_ecs_service" "config_server_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [var.private_subnets]
+    subnets         = var.private_subnets
     security_groups = [var.ecs_sg_id]
   }
 
@@ -429,7 +429,7 @@ resource "aws_ecs_service" "api_gateway_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [var.private_subnets]
+    subnets         = var.private_subnets
     security_groups = [var.ecs_sg_id]
   }
 

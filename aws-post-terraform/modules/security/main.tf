@@ -94,14 +94,19 @@ resource "aws_security_group" "database_sg" {
     security_groups = [aws_security_group.ecs_sg.id]
     #cidr_blocks = ["0.0.0.0/0"]
   }
-
   ingress {
-    description     = "MySQL"
-    from_port       = 3306
-    to_port         = 3306
+    description     = "EFS"
+    from_port       = 2049
+    to_port         = 2049
     protocol        = "tcp"
     security_groups = [aws_security_group.ecs_sg.id]
-    #cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description     = "MySQL"
+    from_port       = var.mysql_db_port
+    to_port         = var.mysql_db_port
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs_sg.id]
   }
 
   egress {

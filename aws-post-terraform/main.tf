@@ -8,6 +8,7 @@ module "security" {
   project_name          = var.project_name
   vpc_id                = module.vpc.vpc_id
   mongo_db_port         = module.ecs.mongo_db_port
+  mysql_db_port         = 3306
   zipkin_port           = module.ecs.zipkin_port
   web_server_port       = module.ecs.web_server_port
   registry_service_port = module.ecs.registry_service_port
@@ -19,7 +20,7 @@ module "alb" {
   source                = "./modules/alb"
   project_name          = var.project_name
   vpc_id                = module.vpc.vpc_id
-  subnets               = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
+  public_subnets        = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
   alb_sg_id             = module.security.alb_sg_id
   mongo_db_port         = module.ecs.mongo_db_port
   zipkin_port           = module.ecs.zipkin_port
@@ -43,7 +44,7 @@ module "rds" {
   source         = "./modules/rds"
   project_name   = var.project_name
   database_sg_id = module.security.database_sg_id
-  subnets        = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
+  public_subnets = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
   db_name        = "login"
   db_username    = "testuser"
   db_password    = "testpass"
@@ -62,7 +63,7 @@ module "ecr" {
 module "efs" {
   source          = "./modules/efs"
   project_name    = var.project_name
-  private_subnets = module.vpc.private_subnet_1a_id
+  private_subnets = [module.vpc.private_subnet_1a_id, module.vpc.private_subnet_1b_id]
   database_sg_id  = module.security.database_sg_id
 }
 
@@ -73,7 +74,7 @@ module "ecs" {
   cluster_name                          = "${var.project_name}-ecs-cluster"
   alb_dns                               = module.alb.alb_dns
   cloudwatch_log_group_name             = module.cloudwatch.cloudwatch_log_group_name
-  private_subnets                       = module.vpc.private_subnet_1a_id
+  private_subnets                       = [module.vpc.private_subnet_1a_id, module.vpc.private_subnet_1b_id]
   ecs_sg_id                             = module.security.ecs_sg_id
   ecs_execution_role                    = module.iam.ecs_execution_role
   mongo_db_username                     = "mongouser"

@@ -4,7 +4,7 @@ variable "project_name" {
 variable "database_sg_id" {
 }
 
-variable "subnets" {
+variable "public_subnets" {
 }
 
 variable "db_name" {

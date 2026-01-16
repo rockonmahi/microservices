@@ -7,6 +7,9 @@ variable "vpc_id" {
 variable "mongo_db_port" {
 }
 
+variable "mysql_db_port" {
+}
+
 variable "zipkin_port" {
 }
 
