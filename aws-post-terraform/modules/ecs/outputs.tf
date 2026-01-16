@@ -7,10 +7,6 @@ output "cluster_arn" {
 }
 
 output "mongo_db_port" {
-  value = var.
-}
-
-output "mongo_db_port" {
   value = var.mongo_db_port
 }
 
