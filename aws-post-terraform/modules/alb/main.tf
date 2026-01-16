@@ -160,7 +160,7 @@ resource "aws_lb_target_group" "api_gateway_alb_target_group" {
   }
 }
 
-resource "aws_lb_listener" "zipkin_alb_listener" {
+resource "aws_lb_listener" "mongo_db_alb_listener" {
   load_balancer_arn = aws_lb.alb.arn
   port              = var.mongo_db_port
   protocol          = "HTTP"
