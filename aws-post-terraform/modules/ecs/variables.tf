@@ -31,9 +31,6 @@ variable "mongo_db_port" {
 variable "mongo_db_efs_file_system_id" {
 }
 
-variable "mongo_db_alb_target_group_arn" {
-}
-
 variable "zipkin_name" {
 }
 

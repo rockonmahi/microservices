@@ -2,10 +2,6 @@ output "alb_dns" {
   value = aws_lb.alb.dns_name
 }
 
-output "mongo_db_alb_target_group_arn" {
-  value = aws_lb_target_group.mongo_db_alb_target_group.arn
-}
-
 output "zipkin_alb_target_group_arn" {
   value = aws_lb_target_group.zipkin_alb_target_group.arn
 }

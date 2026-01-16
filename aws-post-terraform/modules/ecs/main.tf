@@ -80,18 +80,11 @@ resource "aws_ecs_service" "mongo_ecs_service" {
     security_groups = [var.ecs_sg_id]
   }
 
-  load_balancer {
-    target_group_arn = var.mongo_db_alb_target_group_arn
-    container_name   = var.mongo_db_name
-    container_port   = var.mongo_db_port
-  }
-
   tags = {
     Name        = "${var.project_name}-ecs-service-mongo-db"
     Environment = var.project_name
   }
 }
-
 
 resource "aws_ecs_task_definition" "zipkin_ecs_task_definition" {
   family                   = var.zipkin_name

@@ -80,7 +80,6 @@ module "ecs" {
   mongo_db_password                     = "mongopass"
   mongo_db_port                         = 27017
   mongo_db_name                         = "mongo-db"
-  mongo_db_alb_target_group_arn         = module.alb.mongo_db_alb_target_group_arn
   mongo_db_efs_file_system_id           = module.efs.mongo_db_efs_file_system_id
   zipkin_port                           = 9411
   zipkin_name                           = "zipkin"
