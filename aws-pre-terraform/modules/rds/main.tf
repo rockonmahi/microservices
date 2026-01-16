@@ -20,7 +20,7 @@ resource "aws_db_instance" "mysql" {
   username                = var.db_username
   password                = var.db_password
   db_subnet_group_name    = aws_db_subnet_group.mysql_subnet_group.name
-  vpc_security_group_ids  = [var.rds_sg_id]
+  vpc_security_group_ids  = [var.database_sg_id]
   multi_az                = false
   publicly_accessible     = false
   backup_retention_period = 7

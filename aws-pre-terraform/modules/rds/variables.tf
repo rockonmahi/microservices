@@ -1,7 +1,7 @@
 variable "project_name" {
 }
 
-variable "rds_sg_id" {
+variable "database_sg_id" {
 }
 
 variable "subnets" {

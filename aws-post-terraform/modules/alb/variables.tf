@@ -10,6 +10,9 @@ variable "subnets" {
 variable "alb_sg_id" {
 }
 
+variable "mongo_db_port" {
+}
+
 variable "zipkin_port" {
 }
 

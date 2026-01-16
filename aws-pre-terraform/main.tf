@@ -7,6 +7,7 @@ module "security" {
   source                = "./modules/security"
   project_name          = var.project_name
   vpc_id                = module.vpc.vpc_id
+  mongo_db_port         = module.ecs.mongo_db_port
   zipkin_port           = module.ecs.zipkin_port
   web_server_port       = module.ecs.web_server_port
   registry_service_port = module.ecs.registry_service_port
@@ -20,6 +21,7 @@ module "alb" {
   vpc_id                = module.vpc.vpc_id
   subnets               = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
   alb_sg_id             = module.security.alb_sg_id
+  mongo_db_port         = module.ecs.mongo_db_port
   zipkin_port           = module.ecs.zipkin_port
   web_server_port       = module.ecs.web_server_port
   registry_service_port = module.ecs.registry_service_port
@@ -38,13 +40,13 @@ module "iam" {
 }
 
 module "rds" {
-  source       = "./modules/rds"
-  project_name = var.project_name
-  rds_sg_id    = module.security.rds_sg_id
-  subnets      = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
-  db_name      = "login"
-  db_username  = "testuser"
-  db_password  = "testpass"
+  source         = "./modules/rds"
+  project_name   = var.project_name
+  database_sg_id = module.security.database_sg_id
+  subnets        = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
+  db_name        = "login"
+  db_username    = "testuser"
+  db_password    = "testpass"
 }
 
 module "ecr" {
@@ -57,6 +59,13 @@ module "ecr" {
   api_gateway_repo_name      = "${var.project_name}-api-gateway-repo"
 }
 
+module "efs" {
+  source          = "./modules/efs"
+  project_name    = var.project_name
+  private_subnets = module.vpc.private_subnet_1a_id
+  database_sg_id = module.security.database_sg_id
+}
+
 module "ecs" {
   source                                = "./modules/ecs"
   project_name                          = var.project_name
@@ -67,6 +76,12 @@ module "ecs" {
   private_subnets                       = module.vpc.private_subnet_1a_id
   ecs_sg_id                             = module.security.ecs_sg_id
   ecs_execution_role                    = module.iam.ecs_execution_role
+  mongo_db_username                     = "mongouser"
+  mongo_db_password                     = "mongopass"
+  mongo_db_port                         = 27017
+  mongo_db_name                         = "mongo-db"
+  mongo_db_alb_target_group_arn         = module.alb.mongo_db_alb_target_group_arn
+  mongo_db_efs_file_system_id           = module.efs.mongo_db_efs_file_system_id
   zipkin_port                           = 9411
   zipkin_name                           = "zipkin"
   zipkin_alb_target_group_arn           = module.alb.zipkin_alb_target_group_arn
