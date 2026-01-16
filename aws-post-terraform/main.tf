@@ -63,7 +63,7 @@ module "efs" {
   source          = "./modules/efs"
   project_name    = var.project_name
   private_subnets = module.vpc.private_subnet_1a_id
-  database_sg_id = module.security.database_sg_id
+  database_sg_id  = module.security.database_sg_id
 }
 
 module "ecs" {

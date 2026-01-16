@@ -18,15 +18,15 @@ resource "aws_lb_target_group" "mongo_db_alb_target_group" {
   target_type = "ip"
 
   health_check {
-    enabled             = true
-    path                = "/actuator/health"
-    port                = "traffic-port"
-    protocol            = "HTTP"
-    matcher             = "200"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
+    command = [
+      "CMD-SHELL",
+      "mongosh --quiet --eval \"db.runCommand({ ping: 1 }).ok\" || exit 1"
+    ]
+    enabled     = true
+    interval    = 30
+    timeout     = 5
+    retries     = 3
+    startPeriod = 60
   }
 
   tags = {
