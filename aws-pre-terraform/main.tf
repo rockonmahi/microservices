@@ -40,7 +40,7 @@ module "iam" {
   project_name = var.project_name
 }
 
-/*module "rds" {
+module "rds" {
   source         = "./modules/rds"
   project_name   = var.project_name
   database_sg_id = module.security.database_sg_id
@@ -49,7 +49,7 @@ module "iam" {
   db_name        = "login"
   db_username    = "testuser"
   db_password    = "testpass"
-}*/
+}
 
 module "ecr" {
   source                     = "./modules/ecr"
