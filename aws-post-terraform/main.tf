@@ -8,7 +8,7 @@ module "security" {
   project_name          = var.project_name
   vpc_id                = module.vpc.vpc_id
   mongo_db_port         = module.ecs.mongo_db_port
-  mysql_db_port         = 3306
+  mysql_db_port         = module.rds.mysql_db_port
   zipkin_port           = module.ecs.zipkin_port
   web_server_port       = module.ecs.web_server_port
   registry_service_port = module.ecs.registry_service_port
@@ -40,15 +40,16 @@ module "iam" {
   project_name = var.project_name
 }
 
-module "rds" {
+/*module "rds" {
   source         = "./modules/rds"
   project_name   = var.project_name
   database_sg_id = module.security.database_sg_id
   public_subnets = [module.vpc.public_subnet_1a_id, module.vpc.public_subnet_1b_id]
+  mysql_db_port  = 3306
   db_name        = "login"
   db_username    = "testuser"
   db_password    = "testpass"
-}
+}*/
 
 module "ecr" {
   source                     = "./modules/ecr"

@@ -3,7 +3,7 @@ output "rds_endpoint" {
 }
 
 output "mysql_db_port" {
-  value = aws_db_instance.mysql.port
+  value = var.mysql_db_port
 }
 
 output "db_username" {

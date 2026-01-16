@@ -10,6 +10,7 @@ resource "aws_db_subnet_group" "mysql_subnet_group" {
 
 resource "aws_db_instance" "mysql" {
   identifier              = "${var.project_name}-mysql-db"
+  port                    = var.mysql_db_port
   engine                  = "mysql"
   engine_version          = "8.0"
   instance_class          = "db.t3.micro"
@@ -29,7 +30,7 @@ resource "aws_db_instance" "mysql" {
   deletion_protection     = false
 
   tags = {
-    Name        = "${var.project_name}--mysql-rds"
+    Name        = "${var.project_name}-mysql-rds"
     Environment = var.project_name
   }
 }

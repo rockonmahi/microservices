@@ -9,7 +9,7 @@ resource "aws_efs_file_system" "mongo_db_efs_file_system" {
 
 resource "aws_efs_mount_target" "mongo_db_efs_mount_target" {
   file_system_id  = aws_efs_file_system.mongo_db_efs_file_system.id
-  for_each       = toset(var.private_subnets)
-  subnet_id      = each.value
+  for_each        = toset(var.private_subnets)
+  subnet_id       = each.value
   security_groups = [var.database_sg_id]
 }
