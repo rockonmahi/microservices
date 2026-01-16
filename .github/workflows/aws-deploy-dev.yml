@@ -63,7 +63,6 @@ jobs:
       - name: Build zipkin Image
         working-directory: ./other-service/zipkin
         env:
-          #ZIPKIN_IMAGE_URI: ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com/${{secrets.AWS_ZIPKIN_ECR_REPO}}:latest
           ZIPKIN_IMAGE_URI: ${{env.AWS_ZIPKIN_ECR_REPO_URL}}:latest
         run: |
           docker build -t $ZIPKIN_IMAGE_URI .
@@ -80,7 +79,7 @@ jobs:
       - name: Build registry-service Image
         working-directory: ./registry-service
         env:
-          REGISTRY_SERVICE_IMAGE_URI: ${{env.AWS_WEB_SERVER_ECR_REPO_URL}}:latest
+          REGISTRY_SERVICE_IMAGE_URI: ${{env.AWS_REGISTRY_SERVICE_ECR_REPO_URL}}:latest
         run: |
           mvn clean install -DskipTests
           docker build -t $REGISTRY_SERVICE_IMAGE_URI .
