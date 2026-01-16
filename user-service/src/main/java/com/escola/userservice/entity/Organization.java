@@ -1,11 +1,10 @@
 package com.escola.userservice.entity;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.io.Serializable;
 import java.util.Set;
-
-import jakarta.persistence.*;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "Organization")

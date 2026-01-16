@@ -1,12 +1,10 @@
 package com.escola.saml2.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
-//Change : All javax.* changes to jakarta.* with Spring Boot 3
-import jakarta.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Not efficient when it comes to Synchronization

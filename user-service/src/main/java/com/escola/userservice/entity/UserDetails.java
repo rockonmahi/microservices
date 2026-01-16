@@ -1,8 +1,8 @@
 package com.escola.userservice.entity;
 
-import java.io.Serializable;
-
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 
 
 @Entity

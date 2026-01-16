@@ -1,10 +1,10 @@
 package com.escola.userservice.entity;
 
-import java.io.Serializable;
-
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name="Role_Modules_Mapping")
