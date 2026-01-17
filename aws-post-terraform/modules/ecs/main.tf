@@ -318,6 +318,10 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
           value = tostring(var.api_gateway_port)
         },
         {
+          name  = "AUTHENTICATION_SERVER_PORT"
+          value = tostring(var.authentication_server_port)
+        },
+        {
           name  = "ZIPKIN_PORT"
           value = tostring(var.zipkin_port)
         }
@@ -475,6 +479,10 @@ resource "aws_ecs_task_definition" "authentication_server_ecs_task_definition" {
         {
           name  = "CONFIG_SERVER_PORT"
           value = tostring(var.config_server_port)
+        },
+        {
+          name  = "AUTHENTICATION_SERVER_PORT"
+          value = tostring(var.authentication_server_port)
         },
         {
           name  = "ZIPKIN_PORT"

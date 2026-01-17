@@ -1,11 +1,11 @@
 server:
   servlet:
     context-path: /authentication-server
-  port: 5115
+  port: ${AUTHENTICATION_SERVER_PORT}
 spring:
   data:
     mongodb:
-      uri: "mongodb://mongouser:mongopass@mongodb:27017/login?authSource=admin"
+      uri: "mongodb://mongouser:mongopass@mongo:27017/login?authSource=admin"
 eureka:
   client:
     serviceUrl:
