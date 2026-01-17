@@ -135,6 +135,31 @@ resource "aws_lb_target_group" "api_gateway_alb_target_group" {
   }
 }
 
+resource "aws_lb_target_group" "authentication_server_alb_target_group" {
+  name        = "${var.project_name}-alb-tg-authentication-server"
+  port        = var.authentication_server_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  health_check {
+    enabled             = true
+    path                = "/authentication-server/health"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 60
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name        = "${var.project_name}-alb-tg-authentication-server"
+    Environment = var.project_name
+  }
+}
+
 resource "aws_lb_listener" "zipkin_alb_listener" {
   load_balancer_arn = aws_lb.alb.arn
   port              = var.zipkin_port
@@ -211,6 +236,22 @@ resource "aws_lb_listener_rule" "api_gateway_listener_rule" {
   condition {
     path_pattern {
       values = ["/api-gateway", "/api-gateway/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "authentication_server_listener_rule" {
+  listener_arn = aws_lb_listener.web_server_alb_listener.arn
+  priority     = 15
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.authentication_server_alb_target_group.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/authentication-server", "/authentication-server/*"]
     }
   }
 }

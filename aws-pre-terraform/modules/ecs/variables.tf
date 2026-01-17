@@ -7,6 +7,12 @@ variable "aws_region" {
 variable "alb_dns" {
 }
 
+variable "cluster_name" {
+}
+
+variable "ecs_execution_role" {
+}
+
 variable "cloudwatch_log_group_name" {
 }
 
@@ -91,8 +97,14 @@ variable "api_gateway_alb_target_group_arn" {
 variable "api_gateway_repository_url" {
 }
 
-variable "cluster_name" {
+variable "authentication_server_name" {
 }
 
-variable "ecs_execution_role" {
+variable "authentication_server_port" {
+}
+
+variable "authentication_server_alb_target_group_arn" {
+}
+
+variable "authentication_server_repository_url" {
 }

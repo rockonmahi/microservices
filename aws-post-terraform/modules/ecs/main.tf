@@ -444,3 +444,81 @@ resource "aws_ecs_service" "api_gateway_ecs_service" {
     Environment = var.project_name
   }
 }
+
+
+resource "aws_ecs_task_definition" "authentication_server_ecs_task_definition" {
+  family                   = var.authentication_server_name
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 1024
+  memory                   = 3072
+  execution_role_arn       = var.ecs_execution_role
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+
+  container_definitions = jsonencode([
+    {
+      name  = var.authentication_server_name
+      image = var.authentication_server_repository_url
+      environment = [
+        {
+          name  = "AWS_ALB_DNS"
+          value = tostring(var.alb_dns)
+        },
+        {
+          name  = "REGISTRY_SERVICE_PORT"
+          value = tostring(var.registry_service_port)
+        },
+        {
+          name  = "CONFIG_SERVER_PORT"
+          value = tostring(var.config_server_port)
+        },
+        {
+          name  = "ZIPKIN_PORT"
+          value = tostring(var.zipkin_port)
+        }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = var.cloudwatch_log_group_name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
+      portMappings = [{ containerPort = var.authentication_server_port }]
+    }
+  ])
+
+  tags = {
+    Name        = "${var.project_name}-ecs-task-definition-authentication-server"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_ecs_service" "authentication_server_ecs_service" {
+  name            = "${var.project_name}-${var.authentication_server_name}"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
+  task_definition = aws_ecs_task_definition.authentication_server_ecs_task_definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets         = var.private_subnets
+    security_groups = [var.ecs_sg_id]
+  }
+
+  load_balancer {
+    target_group_arn = var.authentication_server_alb_target_group_arn
+    container_name   = var.authentication_server_name
+    container_port   = var.authentication_server_port
+  }
+
+  tags = {
+    Name        = "${var.project_name}-ecs-service-authentication-server"
+    Environment = var.project_name
+  }
+}

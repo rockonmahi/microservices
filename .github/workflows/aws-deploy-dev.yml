@@ -28,27 +28,19 @@ jobs:
         with:
           terraform_version: 1.6.6
 
-      - name: Pre Terraform Init
-        working-directory: ./aws-pre-terraform
-        run: terraform init
-
-      - name: Pre Terraform Validate
-        working-directory: ./aws-pre-terraform
-        run: terraform validate
-
-      - name: Pre Terraform Plan
-        working-directory: ./aws-pre-terraform
-        run: terraform plan
-
-      - name: Pre Terraform Apply
+      - name: Pre Terraform
         working-directory: ./aws-pre-terraform
         run: |
+          terraform init
+          terraform validate
+          terraform plan
           terraform apply -auto-approve
           echo "AWS_ZIPKIN_ECR_REPO_URL=$(terraform output -raw zipkin_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_WEB_SERVER_ECR_REPO_URL=$(terraform output -raw web_server_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_REGISTRY_SERVICE_ECR_REPO_URL=$(terraform output -raw registry_service_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_CONFIG_SERVER_ECR_REPO_URL=$(terraform output -raw config_server_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_API_GATEWAY_ECR_REPO_URL=$(terraform output -raw api_gateway_ecr_repository_url)" >> $GITHUB_ENV
+          echo "AWS_AUTHENTICATION_SERVER_ECR_REPO_URL=$(terraform output -raw authentication_server_ecr_repository_url)" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -103,18 +95,19 @@ jobs:
           docker build -t $API_GATEWAY_IMAGE_URI .
           docker push $API_GATEWAY_IMAGE_URI
 
-      - name: Post Terraform Init
-        working-directory: ./aws-post-terraform
-        run: terraform init
+      - name: Build authentication-server Image
+        working-directory: ./authentication-server
+        env:
+          AUTHENTICATION_SERVER_IMAGE_URI: ${{env.AWS_AUTHENTICATION_SERVER_ECR_REPO_URL}}:latest
+        run: |
+          mvn clean install -DskipTests
+          docker build -t $AUTHENTICATION_SERVER_IMAGE_URI .
+          docker push $AUTHENTICATION_SERVER_IMAGE_URI
 
-      - name: Post Terraform Validate
+      - name: Post Terraform
         working-directory: ./aws-post-terraform
-        run: terraform validate
-
-      - name: Post Terraform Plan
-        working-directory: ./aws-post-terraform
-        run: terraform plan
-
-      - name: Post Terraform Apply
-        working-directory: ./aws-post-terraform
-        run: terraform apply -auto-approve
+        run: |
+          terraform init
+          terraform validate
+          terraform plan
+          terraform apply -auto-approve

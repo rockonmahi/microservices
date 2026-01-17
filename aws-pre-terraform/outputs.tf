@@ -22,6 +22,10 @@ output "api_gateway_ecr_repository_url" {
   value = module.ecr.api_gateway_ecr_repository_url
 }
 
+output "authentication_server_ecr_repository_url" {
+  value = module.ecr.authentication_server_ecr_repository_url
+}
+
 output "rds_endpoint" {
   value = module.rds.rds_endpoint
 }

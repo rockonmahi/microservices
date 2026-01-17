@@ -24,3 +24,6 @@ variable "config_server_port" {
 
 variable "api_gateway_port" {
 }
+
+variable "authentication_server_port" {
+}

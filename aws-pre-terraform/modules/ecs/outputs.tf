@@ -29,3 +29,7 @@ output "config_server_port" {
 output "api_gateway_port" {
   value = var.api_gateway_port
 }
+
+output "authentication_server_port" {
+  value = var.authentication_server_port
+}

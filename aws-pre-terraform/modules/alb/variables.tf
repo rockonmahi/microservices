@@ -10,9 +10,6 @@ variable "public_subnets" {
 variable "alb_sg_id" {
 }
 
-variable "mongo_db_port" {
-}
-
 variable "zipkin_port" {
 }
 
@@ -26,4 +23,7 @@ variable "config_server_port" {
 }
 
 variable "api_gateway_port" {
+}
+
+variable "authentication_server_port" {
 }
