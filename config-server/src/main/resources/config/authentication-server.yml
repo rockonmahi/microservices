@@ -5,7 +5,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: "mongodb://mongouser:mongopass@mongo:27017/login?authSource=admin"
+      uri: "mongodb://mongouser:mongopass@mongodb.internal:27017/login?authSource=admin"
 eureka:
   client:
     serviceUrl:
