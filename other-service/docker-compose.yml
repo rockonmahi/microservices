@@ -60,6 +60,17 @@ services:
     networks:
       - escola-network
           #ipv4_address: 172.52.2.5
+  redis:
+    container_name: redis
+    image: redis:7.2
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
+    networks:
+      - escola-network
+      #ipv4_address: 172.52.2.6
   zipkin:
     container_name: zipkin
     build:
