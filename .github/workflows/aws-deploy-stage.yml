@@ -41,9 +41,9 @@ jobs:
         working-directory: ./aws-pre-terraform
         run: |
           terraform init -backend-config="bucket=stage-microservice-terraform-state"
-          terraform validate -backend-config="bucket=stage-microservice-terraform-state"
-          terraform plan -backend-config="bucket=stage-microservice-terraform-state"
-          terraform apply -backend-config="bucket=stage-microservice-terraform-state" -auto-approve
+          terraform validate
+          terraform plan
+          terraform apply -auto-approve
           echo "AWS_ZIPKIN_ECR_REPO_URL=$(terraform output -raw zipkin_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_WEB_SERVER_ECR_REPO_URL=$(terraform output -raw web_server_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_REGISTRY_SERVICE_ECR_REPO_URL=$(terraform output -raw registry_service_ecr_repository_url)" >> $GITHUB_ENV
