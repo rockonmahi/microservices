@@ -40,10 +40,10 @@ jobs:
       - name: Pre Terraform
         working-directory: ./aws-pre-terraform
         run: |
-          terraform init
-          terraform validate
-          terraform plan
-          terraform apply -auto-approve
+          terraform init -backend-config=backend-dev.tf
+          terraform validate -backend-config=backend-dev.tf
+          terraform plan -backend-config=backend-dev.tf
+          terraform apply -backend-config=backend-dev.tf -auto-approve
           echo "AWS_ZIPKIN_ECR_REPO_URL=$(terraform output -raw zipkin_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_WEB_SERVER_ECR_REPO_URL=$(terraform output -raw web_server_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_REGISTRY_SERVICE_ECR_REPO_URL=$(terraform output -raw registry_service_ecr_repository_url)" >> $GITHUB_ENV
