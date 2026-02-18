@@ -2,14 +2,14 @@ name: AWS Dev Deployment
 
 on:
   push:
-    branches: ["dev"]
+    branches: ["dev-start"]
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  dev-deploy:
+  dev-start-server:
     runs-on: ubuntu-latest
 
     environment: dev
