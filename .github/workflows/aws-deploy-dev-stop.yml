@@ -38,7 +38,7 @@ jobs:
           terraform_version: 1.6.6
 
       - name: Pre Terraform
-        working-directory: ./aws-pre-terraform
+        working-directory: ./aws-post-terraform
         run: |
           terraform init -backend-config="bucket=dev-microservice-terraform-state"
           terraform destroy -var="project_name=dev" -auto-approve
