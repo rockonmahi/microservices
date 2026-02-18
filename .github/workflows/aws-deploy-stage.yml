@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  dev-deploy:
+  stage-deploy:
     runs-on: ubuntu-latest
 
     environment: stage
