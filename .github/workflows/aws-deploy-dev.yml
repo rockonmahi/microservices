@@ -43,7 +43,7 @@ jobs:
           terraform init -backend-config="bucket=dev-microservice-terraform-state"
           terraform validate
           terraform plan
-          terraform apply -auto-approve
+          terraform apply -var="project_name=dev" -auto-approve
           echo "AWS_ZIPKIN_ECR_REPO_URL=$(terraform output -raw zipkin_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_WEB_SERVER_ECR_REPO_URL=$(terraform output -raw web_server_ecr_repository_url)" >> $GITHUB_ENV
           echo "AWS_REGISTRY_SERVICE_ECR_REPO_URL=$(terraform output -raw registry_service_ecr_repository_url)" >> $GITHUB_ENV
@@ -109,7 +109,7 @@ jobs:
       - name: Post Terraform
         working-directory: ./aws-post-terraform
         run: |
-          terraform init
+          terraform init -backend-config="bucket=dev-microservice-terraform-state"
           terraform validate
           terraform plan
-          terraform apply -auto-approve
+          terraform apply -var="project_name=dev" -auto-approve
