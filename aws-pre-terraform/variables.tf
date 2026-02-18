@@ -1,5 +1,5 @@
 variable "project_name" {
-  default = "stage"
+  default = "dev"
 }
 
 variable "aws_region" {
