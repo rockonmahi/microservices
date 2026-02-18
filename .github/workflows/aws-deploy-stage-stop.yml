@@ -1,18 +1,18 @@
-name: AWS Dev Deployment
+name: AWS Stage Deployment
 
 on:
   push:
-    branches: ["dev-stop"]
+    branches: ["stage-stop"]
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  dev-stop-server:
+  stage-stop-server:
     runs-on: ubuntu-latest
 
-    environment: dev
+    environment: stage
 
     steps:
       - name: Check Out Code
@@ -33,5 +33,5 @@ jobs:
       - name: Pre Terraform
         working-directory: ./aws-post-terraform
         run: |
-          terraform init -backend-config="bucket=dev-microservice-terraform-state"
-          terraform destroy -var="project_name=dev" -auto-approve
+          terraform init -backend-config="bucket=stage-microservice-terraform-state"
+          terraform destroy -var="project_name=stage" -auto-approve
