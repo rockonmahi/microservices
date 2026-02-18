@@ -41,6 +41,7 @@ jobs:
         working-directory: ./aws-pre-terraform
         run: |
           terraform init -backend-config="bucket=dev-microservice-terraform-state"
+          terraform destroy -var="project_name=stage" -auto-approve
           terraform validate
           terraform plan
           terraform apply -var="project_name=dev" -auto-approve
