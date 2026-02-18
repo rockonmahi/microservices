@@ -106,7 +106,7 @@ module "ecs" {
   api_gateway_alb_target_group_arn           = module.alb.api_gateway_alb_target_group_arn
   api_gateway_repository_url                 = module.ecr.api_gateway_ecr_repository_url
   authentication_server_port                 = 5115
-  authentication_server_name                 = "authentication_server"
+  authentication_server_name                 = "authentication-server"
   authentication_server_alb_target_group_arn = module.alb.authentication_server_alb_target_group_arn
   authentication_server_repository_url       = module.ecr.authentication_server_ecr_repository_url
 }
