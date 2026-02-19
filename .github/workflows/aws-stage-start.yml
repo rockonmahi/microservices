@@ -1,4 +1,4 @@
-name: AWS Stage Deployment
+name: AWS Stage Start Server
 
 on:
   push:

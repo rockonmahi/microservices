@@ -1,4 +1,4 @@
-name: AWS Dev Deployment
+name: AWS Dev Stop Server
 
 on:
   push:
