@@ -156,7 +156,7 @@ resource "aws_lb_target_group" "authentication_server_alb_target_group" {
   }
 
   tags = {
-    Name        = "${var.project_name}-alb-tg-authentication-server"
+    Name        = "${var.project_name}-alb-tg-auth-server"
     Environment = var.project_name
   }
 }

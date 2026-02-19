@@ -110,16 +110,3 @@ module "ecs" {
   authentication_server_alb_target_group_arn = module.alb.authentication_server_alb_target_group_arn
   authentication_server_repository_url       = module.ecr.authentication_server_ecr_repository_url
 }
-
-/*
-module "eks" {
-  source                      = "./modules/eks"
-  project_name                = var.project_name
-  private_subnets_id          = [module.vpc.private_subnet_1a_id, module.vpc.private_subnet_1b_id]
-  cluster_name                = "microservice-eks-cluster"
-  eks_cluster_role            = module.iam.eks_cluster_role
-  eks_node_role               = module.iam.eks_node_role
-  eks_worker_node_policy      = module.iam.eks_worker_node_policy
-  ec2_container_registry_read = module.iam.ec2_container_registry_read
-  eks_cni_policy              = module.iam.eks_cni_policy
-}*/
