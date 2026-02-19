@@ -90,15 +90,6 @@ jobs:
           docker build -t $API_GATEWAY_IMAGE_URI .
           docker push $API_GATEWAY_IMAGE_URI
 
-      - name: Build authentication-server Image
-        working-directory: ./authentication-server
-        env:
-          AUTHENTICATION_SERVER_IMAGE_URI: ${{env.AWS_AUTHENTICATION_SERVER_ECR_REPO_URL}}:latest
-        run: |
-          mvn clean install -DskipTests
-          docker build -t $AUTHENTICATION_SERVER_IMAGE_URI .
-          docker push $AUTHENTICATION_SERVER_IMAGE_URI
-
       - name: Post Terraform
         working-directory: ./aws-post-terraform
         run: |
