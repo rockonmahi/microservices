@@ -22,12 +22,20 @@ output "api_gateway_ecr_repository_url" {
   value = module.ecr.api_gateway_ecr_repository_url
 }
 
-output "authentication_server_ecr_repository_url" {
-  value = module.ecr.authentication_server_ecr_repository_url
+output "ecs_cluster_name" {
+  value = module.ecs.cluster_name
+}
+
+output "ecs_cluster_arn" {
+  value = module.ecs.cluster_arn
 }
 
 output "rds_endpoint" {
   value = module.rds.rds_endpoint
+}
+
+output "rds_port" {
+  value = module.rds.rds_port
 }
 
 /*

@@ -1,13 +1,10 @@
 variable "project_name" {
 }
 
-variable "database_sg_id" {
+variable "rds_sg_id" {
 }
 
-variable "public_subnets" {
-}
-
-variable "mysql_db_port" {
+variable "subnets" {
 }
 
 variable "db_name" {

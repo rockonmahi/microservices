@@ -17,75 +17,6 @@ resource "aws_ecs_cluster_capacity_providers" "ecs_cluster_capacity_providers" {
   }
 }
 
-resource "aws_ecs_task_definition" "mongo_db_ecs_task_definition" {
-  family                   = var.mongo_db_name
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = 1024
-  memory                   = 3072
-  execution_role_arn       = var.ecs_execution_role
-  #  task_role_arn      = aws_iam_role.ecs_task_role.arn
-
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture        = "X86_64"
-  }
-
-  volume {
-    name = "mongo-data"
-
-    efs_volume_configuration {
-      file_system_id = var.mongo_db_efs_file_system_id
-      root_directory = "/"
-    }
-  }
-
-  container_definitions = jsonencode([
-    {
-      name  = "mongo"
-      image = "mongo:6"
-
-      portMappings = [
-        {
-          containerPort = var.mongo_db_port
-        }
-      ]
-
-      mountPoints = [
-        {
-          sourceVolume  = "mongo-data"
-          containerPath = "/data/db"
-        }
-      ]
-
-      environment = [
-        { name = "MONGO_INITDB_ROOT_USERNAME", value = var.mongo_db_username },
-        { name = "MONGO_INITDB_ROOT_PASSWORD", value = var.mongo_db_password }
-      ]
-
-      essential = true
-    }
-  ])
-}
-
-resource "aws_ecs_service" "mongo_ecs_service" {
-  name            = "${var.project_name}-${var.mongo_db_name}"
-  cluster         = aws_ecs_cluster.ecs_cluster.id
-  task_definition = aws_ecs_task_definition.mongo_db_ecs_task_definition.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
-
-  network_configuration {
-    subnets         = var.private_subnets
-    security_groups = [var.ecs_sg_id]
-  }
-
-  tags = {
-    Name        = "${var.project_name}-ecs-service-mongo-db"
-    Environment = var.project_name
-  }
-}
-
 resource "aws_ecs_task_definition" "zipkin_ecs_task_definition" {
   family                   = var.zipkin_name
   network_mode             = "awsvpc"
@@ -139,7 +70,7 @@ resource "aws_ecs_service" "zipkin_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = var.private_subnets
+    subnets         = [var.private_subnets]
     security_groups = [var.ecs_sg_id]
   }
 
@@ -198,7 +129,7 @@ resource "aws_ecs_service" "web_server_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = var.private_subnets
+    subnets         = [var.private_subnets]
     security_groups = [var.ecs_sg_id]
   }
 
@@ -267,7 +198,7 @@ resource "aws_ecs_service" "registry_service_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = var.private_subnets
+    subnets         = [var.private_subnets]
     security_groups = [var.ecs_sg_id]
   }
 
@@ -318,10 +249,6 @@ resource "aws_ecs_task_definition" "config_server_ecs_task_definition" {
           value = tostring(var.api_gateway_port)
         },
         {
-          name  = "AUTHENTICATION_SERVER_PORT"
-          value = tostring(var.authentication_server_port)
-        },
-        {
           name  = "ZIPKIN_PORT"
           value = tostring(var.zipkin_port)
         }
@@ -352,7 +279,7 @@ resource "aws_ecs_service" "config_server_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = var.private_subnets
+    subnets         = [var.private_subnets]
     security_groups = [var.ecs_sg_id]
   }
 
@@ -433,7 +360,7 @@ resource "aws_ecs_service" "api_gateway_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = var.private_subnets
+    subnets         = [var.private_subnets]
     security_groups = [var.ecs_sg_id]
   }
 
@@ -445,88 +372,6 @@ resource "aws_ecs_service" "api_gateway_ecs_service" {
 
   tags = {
     Name        = "${var.project_name}-ecs-service-api-gateway"
-    Environment = var.project_name
-  }
-}
-
-
-resource "aws_ecs_task_definition" "authentication_server_ecs_task_definition" {
-  family                   = var.authentication_server_name
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = 1024
-  memory                   = 3072
-  execution_role_arn       = var.ecs_execution_role
-
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture        = "X86_64"
-  }
-
-  container_definitions = jsonencode([
-    {
-      name  = var.authentication_server_name
-      image = var.authentication_server_repository_url
-      environment = [
-        {
-          name  = "AWS_ALB_DNS"
-          value = tostring(var.alb_dns)
-        },
-        {
-          name  = "REGISTRY_SERVICE_PORT"
-          value = tostring(var.registry_service_port)
-        },
-        {
-          name  = "CONFIG_SERVER_PORT"
-          value = tostring(var.config_server_port)
-        },
-        {
-          name  = "AUTHENTICATION_SERVER_PORT"
-          value = tostring(var.authentication_server_port)
-        },
-        {
-          name  = "ZIPKIN_PORT"
-          value = tostring(var.zipkin_port)
-        }
-      ]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = var.cloudwatch_log_group_name
-          awslogs-region        = var.aws_region
-          awslogs-stream-prefix = "ecs"
-        }
-      }
-      portMappings = [{ containerPort = var.authentication_server_port }]
-    }
-  ])
-
-  tags = {
-    Name        = "${var.project_name}-ecs-task-definition-authentication-server"
-    Environment = var.project_name
-  }
-}
-
-resource "aws_ecs_service" "authentication_server_ecs_service" {
-  name            = "${var.project_name}-${var.authentication_server_name}"
-  cluster         = aws_ecs_cluster.ecs_cluster.id
-  task_definition = aws_ecs_task_definition.authentication_server_ecs_task_definition.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
-
-  network_configuration {
-    subnets         = var.private_subnets
-    security_groups = [var.ecs_sg_id]
-  }
-
-  load_balancer {
-    target_group_arn = var.authentication_server_alb_target_group_arn
-    container_name   = var.authentication_server_name
-    container_port   = var.authentication_server_port
-  }
-
-  tags = {
-    Name        = "${var.project_name}-ecs-service-authentication-server"
     Environment = var.project_name
   }
 }

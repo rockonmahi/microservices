@@ -7,12 +7,6 @@ variable "aws_region" {
 variable "alb_dns" {
 }
 
-variable "cluster_name" {
-}
-
-variable "ecs_execution_role" {
-}
-
 variable "cloudwatch_log_group_name" {
 }
 
@@ -22,20 +16,6 @@ variable "private_subnets" {
 variable "ecs_sg_id" {
 }
 
-variable "mongo_db_username" {
-}
-
-variable "mongo_db_password" {
-}
-
-variable "mongo_db_name" {
-}
-
-variable "mongo_db_port" {
-}
-
-variable "mongo_db_efs_file_system_id" {
-}
 
 variable "zipkin_name" {
 }
@@ -97,14 +77,8 @@ variable "api_gateway_alb_target_group_arn" {
 variable "api_gateway_repository_url" {
 }
 
-variable "authentication_server_name" {
+variable "cluster_name" {
 }
 
-variable "authentication_server_port" {
-}
-
-variable "authentication_server_alb_target_group_arn" {
-}
-
-variable "authentication_server_repository_url" {
+variable "ecs_execution_role" {
 }

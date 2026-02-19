@@ -15,6 +15,3 @@ variable "config_server_repo_name" {
 
 variable "api_gateway_repo_name" {
 }
-
-variable "authentication_server_repo_name" {
-}

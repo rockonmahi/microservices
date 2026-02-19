@@ -21,7 +21,3 @@ output "config_server_alb_target_group_arn" {
 output "api_gateway_alb_target_group_arn" {
   value = aws_lb_target_group.api_gateway_alb_target_group.arn
 }
-
-output "authentication_server_alb_target_group_arn" {
-  value = aws_lb_target_group.authentication_server_alb_target_group.arn
-}

@@ -4,7 +4,7 @@ variable "project_name" {
 variable "vpc_id" {
 }
 
-variable "public_subnets" {
+variable "subnets" {
 }
 
 variable "alb_sg_id" {
@@ -23,7 +23,4 @@ variable "config_server_port" {
 }
 
 variable "api_gateway_port" {
-}
-
-variable "authentication_server_port" {
 }

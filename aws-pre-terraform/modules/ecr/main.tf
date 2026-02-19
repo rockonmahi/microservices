@@ -42,12 +42,3 @@ resource "aws_ecr_repository" "api_gateway_ecr_repository" {
     Environment = var.project_name
   }
 }
-
-resource "aws_ecr_repository" "authentication_server_ecr_repository" {
-  name = var.authentication_server_repo_name
-
-  tags = {
-    Name        = "${var.project_name}-ecr-authentication-server"
-    Environment = var.project_name
-  }
-}
