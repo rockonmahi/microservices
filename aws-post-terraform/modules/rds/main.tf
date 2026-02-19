@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "mysql_subnet_group" {
   name       = "${var.project_name}-mysql-subnet-group"
-  subnet_ids = var.subnets
+  subnet_ids = var.public_subnets
 
   tags = {
     Name        = "${var.project_name}-mysql-subnet-group"
@@ -10,6 +10,7 @@ resource "aws_db_subnet_group" "mysql_subnet_group" {
 
 resource "aws_db_instance" "mysql" {
   identifier              = "${var.project_name}-mysql-db"
+  port                    = var.mysql_db_port
   engine                  = "mysql"
   engine_version          = "8.0"
   instance_class          = "db.t3.micro"
@@ -20,7 +21,7 @@ resource "aws_db_instance" "mysql" {
   username                = var.db_username
   password                = var.db_password
   db_subnet_group_name    = aws_db_subnet_group.mysql_subnet_group.name
-  vpc_security_group_ids  = [var.rds_sg_id]
+  vpc_security_group_ids  = [var.database_sg_id]
   multi_az                = false
   publicly_accessible     = false
   backup_retention_period = 7
@@ -29,7 +30,7 @@ resource "aws_db_instance" "mysql" {
   deletion_protection     = false
 
   tags = {
-    Name        = "${var.project_name}--mysql-rds"
+    Name        = "${var.project_name}-mysql-rds"
     Environment = var.project_name
   }
 }

@@ -17,3 +17,7 @@ output "config_server_ecr_repository_url" {
 output "api_gateway_ecr_repository_url" {
   value = aws_ecr_repository.api_gateway_ecr_repository.repository_url
 }
+
+output "authentication_server_ecr_repository_url" {
+  value = aws_ecr_repository.authentication_server_ecr_repository.repository_url
+}
