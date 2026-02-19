@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  dev-start-server:
+  start-server:
     runs-on: ubuntu-latest
 
     environment: dev
