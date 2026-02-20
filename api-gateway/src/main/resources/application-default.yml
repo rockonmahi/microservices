@@ -9,7 +9,7 @@ eureka:
 management:
   endpoints:
     web:
-      base-path: /api-gateway
+      base-path: /api-gateway/actuator
       exposure:
         include: health
   tracing:
