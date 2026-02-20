@@ -120,7 +120,7 @@ resource "aws_lb_target_group" "api_gateway_alb_target_group" {
 
   health_check {
     enabled             = true
-    path                = "/api-gateway/health"
+    path                = "/api-gateway/actuator/health"
     port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
@@ -145,7 +145,7 @@ resource "aws_lb_target_group" "authentication_server_alb_target_group" {
 
   health_check {
     enabled             = true
-    path                = "/authentication-server/health"
+    path                = "/authentication-server/actuator/health"
     port                = "traffic-port"
     protocol            = "HTTP"
     matcher             = "200"
