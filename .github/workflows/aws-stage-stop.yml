@@ -3,6 +3,7 @@ name: AWS Stage Stop Server
 on:
   push:
     branches: ["stage-stop"]
+  workflow_dispatch:
 
 permissions:
   id-token: write

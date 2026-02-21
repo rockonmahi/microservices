@@ -3,6 +3,7 @@ name: AWS Dev Stop Server
 on:
   push:
     branches: ["dev-stop"]
+  workflow_dispatch:
 
 permissions:
   id-token: write

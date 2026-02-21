@@ -3,6 +3,7 @@ name: AWS Dev Start Server
 on:
   push:
     branches: ["dev-start"]
+  workflow_dispatch:
 
 permissions:
   id-token: write

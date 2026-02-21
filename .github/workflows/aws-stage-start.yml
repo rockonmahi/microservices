@@ -3,6 +3,7 @@ name: AWS Stage Start Server
 on:
   push:
     branches: ["stage-start"]
+  workflow_dispatch:
 
 permissions:
   id-token: write
