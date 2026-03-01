@@ -1,4 +1,4 @@
-package com.escola.authserver.repository;
+package com.escola.authserver.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class OAuth2RegisteredClientRepository implements org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository {
+public class RegisteredClientRepositoryImpl implements org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository {
 
     @Override
     public void save(RegisteredClient registeredClient) {
@@ -27,12 +27,12 @@ public class OAuth2RegisteredClientRepository implements org.springframework.sec
 
     @Override
     public RegisteredClient findById(String id) {
-      return this.findById(id);
+        return this.findById(id);
     }
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
-       return saveRegisteredClient(clientId);
+        return saveRegisteredClient(clientId);
     }
 
     private RegisteredClient saveRegisteredClient(String clientId) {

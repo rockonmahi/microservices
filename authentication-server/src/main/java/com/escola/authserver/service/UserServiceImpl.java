@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String saveLoginUser() {
 
-
 		UserDetails userDetails = UserDetails.builder()
 				.firstName("Mahendra")
 				.middleName("Pratap")
