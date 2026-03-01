@@ -1,13 +1,12 @@
 package com.escola.authserver.repository.impl;
 
-import com.escola.authserver.entity.RegisteredClientSecret;
-import com.escola.authserver.repository.RegisteredClientSecretRepository;
+import com.escola.authserver.entity.RegisteredClients;
+import com.escola.authserver.repository.RegisteredClientsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,10 +22,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RegisteredClientRepositoryImpl implements org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository {
 
-    private final RegisteredClientSecretRepository registeredClientSecretRepository;
+    private final RegisteredClientsRepository registeredClientSecretRepository;
+
     @Override
     public void save(RegisteredClient registeredClient) {
-        registeredClientSecretRepository.save(convert(registeredClient));
+        save(convert(registeredClient));
+    }
+
+    private RegisteredClients save(RegisteredClients registeredClient) {
+       return registeredClientSecretRepository.save(registeredClient);
     }
 
     @Override
@@ -38,103 +40,111 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
-        return convert(registeredClientSecretRepository.findByClientId(clientId));
+        return convert(registeredClientSecretRepository.findByClientId(clientId).orElseGet(() -> registeredClientNotFound(clientId)));
     }
 
-    private void saveRegisteredClient(String clientId) {
+    private RegisteredClients registeredClientNotFound(String clientId) {
+        RegisteredClient registeredClient;
+        switch (clientId) {
+            case "clientCredentialsSelfContained":
+                registeredClient = RegisteredClient.withId("client-credentials-self-contained")
+                        .clientId("clientCredentialsSelfContained")
+                        .clientSecret("{bcrypt}$2a$10$MOvO4ycIuh3SaO0avHILm.yeTkB2PJ98DK3c0vQ3vkxZk9UrmLQXC")
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                        .scopes(scopes -> scopes.addAll(
+                                List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
+                        .tokenSettings(TokenSettings.builder()
+                                .accessTokenTimeToLive(Duration.ofMinutes(10))
+                                .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
+                                .build())
+                        .build();
+                break;
+            case "clientCredentialsReference":
+                registeredClient = RegisteredClient.withId("client-credentials-reference")
+                        .clientId("clientCredentialsReference")
+                        .clientSecret("{bcrypt}$2a$12$ahlGFAzG6zg1.IIGv6wLEOeWFS3E2IFKYZoe2ahsBmyY0OSAfTFaO")
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                        .scopes(scopes -> scopes.addAll(
+                                List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
+                        .tokenSettings(TokenSettings.builder()
+                                .accessTokenTimeToLive(Duration.ofMinutes(10))
+                                .accessTokenFormat(new OAuth2TokenFormat("reference"))
+                                .build())
+                        .build();
+                break;
+            case "authorizationCodeSelfContained":
+                registeredClient = RegisteredClient.withId("authorization-code-self-contained")
+                        .clientId("authorizationCodeSelfContained")
+                        .clientSecret("{bcrypt}$2a$12$IBnNwjtJbW99CAnnMPtG6OcFSYPCTk6e/dXBiRfdgIVER1/rMFVCi")
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                        .redirectUri("https://oauth.pstmn.io/v1/callback")
+                        .scopes(scopes -> scopes.addAll(
+                                List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
+                        .tokenSettings(TokenSettings.builder()
+                                .accessTokenTimeToLive(Duration.ofMinutes(10))
+                                .refreshTokenTimeToLive(Duration.ofHours(8))
+                                .reuseRefreshTokens(false)
+                                .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
+                                .build())
+                        .build();
+                break;
+            case "eazypublicclient":
+                registeredClient = RegisteredClient.withId("pkce-public-client")
+                        .clientId("eazypublicclient")
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                        .redirectUri("https://oauth.pstmn.io/v1/callback")
+                        .scopes(scopes -> scopes.addAll(
+                                List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
+                        .clientSettings(ClientSettings.builder()
+                                .requireProofKey(true)
+                                .build())
+                        .tokenSettings(TokenSettings.builder()
+                                .accessTokenTimeToLive(Duration.ofMinutes(10))
+                                .refreshTokenTimeToLive(Duration.ofHours(8))
+                                .reuseRefreshTokens(false)
+                                .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
+                                .build())
+                        .build();
+                break;
+            case "passwordSelfContained":
+                registeredClient = RegisteredClient.withId("password-self-contained")
+                        .clientId("passwordSelfContained")
+                        .clientSecret("{bcrypt}$2a$12$Q6de7Lt/AWs0OeL4bbnL7eDNldO8n5Rn6b8adTSD1TmtwtYQBOB1W")
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .authorizationGrantType(AuthorizationGrantType.PASSWORD)
+                        .scopes(scopes -> scopes.addAll(
+                                List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
+                        .tokenSettings(TokenSettings.builder()
+                                .accessTokenTimeToLive(Duration.ofMinutes(10))
+                                .refreshTokenTimeToLive(Duration.ofHours(8))
+                                .reuseRefreshTokens(false)
+                                .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
+                                .build())
+                        .build();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown clientId: " + clientId);
+        }
 
-        RegisteredClient clientCredentialsSelfContained = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("clientCredentialsSelfContained")
-                .clientSecret("{bcrypt}$2a$10$MOvO4ycIuh3SaO0avHILm.yeTkB2PJ98DK3c0vQ3vkxZk9UrmLQXC")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
-                        .build())
-                .build();
-
-        registeredClientSecretRepository.save(convert(clientCredentialsSelfContained));
-
-        RegisteredClient clientCredentialsReference = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("clientCredentialsReference")
-                .clientSecret("{bcrypt}$2a$12$ahlGFAzG6zg1.IIGv6wLEOeWFS3E2IFKYZoe2ahsBmyY0OSAfTFaO")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .accessTokenFormat(new OAuth2TokenFormat("reference"))
-                        .build())
-                .build();
-
-        registeredClientSecretRepository.save(convert(clientCredentialsReference));
-
-        RegisteredClient authorizationCodeSelfContained = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("authorizationCodeSelfContained")
-                .clientSecret("{bcrypt}$2a$12$IBnNwjtJbW99CAnnMPtG6OcFSYPCTk6e/dXBiRfdgIVER1/rMFVCi")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("https://oauth.pstmn.io/v1/callback")
-                .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .refreshTokenTimeToLive(Duration.ofHours(8))
-                        .reuseRefreshTokens(false)
-                        .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
-                        .build())
-                .build();
-
-        registeredClientSecretRepository.save(convert(authorizationCodeSelfContained));
-
-        RegisteredClient pkceClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("eazypublicclient")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("https://oauth.pstmn.io/v1/callback")
-                .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
-                .clientSettings(ClientSettings.builder().requireProofKey(true).build())
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .refreshTokenTimeToLive(Duration.ofHours(8))
-                        .reuseRefreshTokens(false)
-                        .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
-                        .build())
-                .build();
-
-        registeredClientSecretRepository.save(convert(pkceClient));
-
-        RegisteredClient passwordSelfContained = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("passwordSelfContained")
-                .clientSecret("{bcrypt}$2a$12$Q6de7Lt/AWs0OeL4bbnL7eDNldO8n5Rn6b8adTSD1TmtwtYQBOB1W")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-                .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .refreshTokenTimeToLive(Duration.ofHours(8))
-                        .reuseRefreshTokens(false)
-                        .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
-                        .build())
-                .build();
-
-        registeredClientSecretRepository.save(convert(passwordSelfContained));
+        return save(convert(registeredClient));
     }
 
-    public RegisteredClient convert(RegisteredClientSecret source) {
+    public RegisteredClient convert(RegisteredClients source) {
 
         RegisteredClient.Builder builder =
                 RegisteredClient.withId(source.getId())
                         .clientId(source.getClientId())
                         .clientName(source.getClientName());
 
-        // ---- timestamps ----
         if (source.getClientIdIssuedAt() != null) {
             builder.clientIdIssuedAt(source.getClientIdIssuedAt());
         }
@@ -147,19 +157,16 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
             builder.clientSecretExpiresAt(source.getClientSecretExpiresAt());
         }
 
-        // ---- auth methods ----
         source.getClientAuthenticationMethods()
                 .forEach(v ->
                         builder.clientAuthenticationMethod(
                                 new ClientAuthenticationMethod(v)));
 
-        // ---- grant types ----
         source.getAuthorizationGrantTypes()
                 .forEach(v ->
                         builder.authorizationGrantType(
                                 new AuthorizationGrantType(v)));
 
-        // ---- collections ----
         builder.redirectUris(uris ->
                 uris.addAll(source.getRedirectUris()));
 
@@ -169,7 +176,6 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
         builder.scopes(scopes ->
                 scopes.addAll(source.getScopes()));
 
-        // ---- client settings ----
         builder.clientSettings(
                 ClientSettings.builder()
                         .requireProofKey(source.isRequireProofKey())
@@ -177,7 +183,6 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
                         .build()
         );
 
-        // ---- token settings ----
         TokenSettings.Builder tokenBuilder = TokenSettings.builder()
                 .accessTokenTimeToLive(
                         Duration.ofSeconds(source.getAccessTokenTimeToLive()))
@@ -195,9 +200,9 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
         return builder.build();
     }
 
-    public RegisteredClientSecret convert(RegisteredClient source) {
+    public RegisteredClients convert(RegisteredClient source) {
 
-        return RegisteredClientSecret.builder()
+        return RegisteredClients.builder()
                 .id(source.getId())
                 .clientId(source.getClientId())
                 .clientIdIssuedAt(source.getClientIdIssuedAt())

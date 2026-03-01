@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "registered_clients")
 @Data
 @Builder
-public class RegisteredClientSecret {
+public class RegisteredClients {
 
     @Id
     private String id;

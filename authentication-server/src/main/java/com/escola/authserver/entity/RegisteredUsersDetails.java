@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserDetails {
+public class RegisteredUsersDetails {
     private final String firstName;
     private final String middleName;
     private final String lastName;

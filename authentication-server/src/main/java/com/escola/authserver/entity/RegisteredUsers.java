@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Builder
-@Document(collection = "users")
-public class Users {
+@Document(collection = "registered_users")
+public class RegisteredUsers {
 
     @Id
     private final String id;
@@ -18,5 +18,5 @@ public class Users {
     private final int active;
     private final int accountLock;
 
-    private final UserDetails userDetails;
+    private final RegisteredUsersDetails userDetails;
 }

@@ -2,10 +2,10 @@
 package com.escola.authserver.service;
 
 import com.escola.authserver.dto.UserLoginDto;
-import com.escola.authserver.entity.UserDetails;
-import com.escola.authserver.entity.Users;
+import com.escola.authserver.entity.RegisteredUsersDetails;
+import com.escola.authserver.entity.RegisteredUsers;
 import com.escola.authserver.form.UserLoginForm;
-import com.escola.authserver.repository.UserRepository;
+import com.escola.authserver.repository.RegisteredUsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,18 +19,18 @@ public class UserServiceImpl implements UserService {
 
 	private final PasswordEncoder passwordEncoder;
 
-	private final UserRepository userRepository;
+	private final RegisteredUsersRepository userRepository;
 
 	@Override
 	public String saveLoginUser() {
 
-		UserDetails userDetails = UserDetails.builder()
+		RegisteredUsersDetails userDetails = RegisteredUsersDetails.builder()
 				.firstName("Mahendra")
 				.middleName("Pratap")
 				.lastName("Singh")
 				.build();
 
-		Users user = Users.builder()
+		RegisteredUsers user = RegisteredUsers.builder()
                 .userName("rockonmahi")
                 .fullName("Mahendra Pratap")
                 .password(passwordEncoder.encode("test"))
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.save(user);
 
-		List<Users> loginUserList = userRepository.findByUserNameAndAccountLock(user.getUserName(),0);
+		List<RegisteredUsers> loginUserList = userRepository.findByUserNameAndAccountLock(user.getUserName(),0);
 		if (!loginUserList.isEmpty()) {
 			user = loginUserList.get(0);
 		}
@@ -51,17 +51,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserLoginDto getUserDetails(UserLoginForm userLogin) {
-		List<Users> userList = userRepository.findByUserNameAndAccountLock(userLogin.getUsername(),0);
+		List<RegisteredUsers> userList = userRepository.findByUserNameAndAccountLock(userLogin.getUsername(),0);
 		UserLoginDto userLoginDto= new UserLoginDto();
 		List<String> authorities= Arrays.asList("openid","email","phone");
 		if (userList.isEmpty()) {
 			String userId = saveLoginUser();
-			Users user = userRepository.findById(userId).get();
+			RegisteredUsers user = userRepository.findById(userId).get();
 			userLoginDto.setUsername(user.getUserName());
 			userLoginDto.setPassword(user.getPassword());
 			userLoginDto.setAuthorities(authorities);
 		}else{
-			Users user=userList.get(0);
+			RegisteredUsers user=userList.get(0);
 			userLoginDto.setUsername(user.getUserName());
 			userLoginDto.setPassword(user.getPassword());
 			userLoginDto.setAuthorities(authorities);
