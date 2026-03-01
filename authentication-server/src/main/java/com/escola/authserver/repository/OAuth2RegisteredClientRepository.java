@@ -49,7 +49,7 @@ public class OAuth2RegisteredClientRepository implements org.springframework.sec
 
         RegisteredClient clientCredentialsReference = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("clientCredentialsReference")
-                .clientSecret("{noop}c1BK9Bg2REeydBbvUoUeKCbD2bvJzXGj")
+                .clientSecret("{bcrypt}$2a$12$ahlGFAzG6zg1.IIGv6wLEOeWFS3E2IFKYZoe2ahsBmyY0OSAfTFaO")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
@@ -58,7 +58,7 @@ public class OAuth2RegisteredClientRepository implements org.springframework.sec
 
         RegisteredClient authorizationCodeSelfContained = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("authorizationCodeSelfContained")
-                .clientSecret("{noop}Qw3rTy6UjMnB9zXcV2pL0sKjHn5TxQqB")
+                .clientSecret("{bcrypt}$2a$12$IBnNwjtJbW99CAnnMPtG6OcFSYPCTk6e/dXBiRfdgIVER1/rMFVCi")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -84,7 +84,7 @@ public class OAuth2RegisteredClientRepository implements org.springframework.sec
 
         RegisteredClient passwordSelfContained = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("passwordSelfContained")
-                .clientSecret("{noop}password123")
+                .clientSecret("{bcrypt}$2a$12$Q6de7Lt/AWs0OeL4bbnL7eDNldO8n5Rn6b8adTSD1TmtwtYQBOB1W")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.PASSWORD)
