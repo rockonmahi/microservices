@@ -1,42 +1,47 @@
 package com.escola.authserver.repository.impl;
 
+import com.escola.authserver.entity.RegisteredClientSecret;
+import com.escola.authserver.repository.RegisteredClientSecretRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class RegisteredClientRepositoryImpl implements org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository {
 
+    private final RegisteredClientSecretRepository registeredClientSecretRepository;
     @Override
     public void save(RegisteredClient registeredClient) {
-        this.save(registeredClient);
+        registeredClientSecretRepository.save(convert(registeredClient));
     }
 
     @Override
     public RegisteredClient findById(String id) {
-        return this.findById(id);
+        return convert(registeredClientSecretRepository.findById(id).orElseThrow());
     }
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
-        return saveRegisteredClient(clientId);
+        return convert(registeredClientSecretRepository.findByClientId(clientId));
     }
 
-    private RegisteredClient saveRegisteredClient(String clientId) {
-        Map<String,RegisteredClient> map = new HashMap<>();
+    private void saveRegisteredClient(String clientId) {
 
         RegisteredClient clientCredentialsSelfContained = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("clientCredentialsSelfContained")
@@ -44,8 +49,13 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
-                .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED).build()).build();
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofMinutes(10))
+                        .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
+                        .build())
+                .build();
+
+        registeredClientSecretRepository.save(convert(clientCredentialsSelfContained));
 
         RegisteredClient clientCredentialsReference = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("clientCredentialsReference")
@@ -53,8 +63,13 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
-                .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .accessTokenFormat(OAuth2TokenFormat.REFERENCE).build()).build();
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofMinutes(10))
+                        .accessTokenFormat(new OAuth2TokenFormat("reference"))
+                        .build())
+                .build();
+
+        registeredClientSecretRepository.save(convert(clientCredentialsReference));
 
         RegisteredClient authorizationCodeSelfContained = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("authorizationCodeSelfContained")
@@ -65,9 +80,15 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("https://oauth.pstmn.io/v1/callback")
                 .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
-                .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .refreshTokenTimeToLive(Duration.ofHours(8)).reuseRefreshTokens(false)
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED).build()).build();
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofMinutes(10))
+                        .refreshTokenTimeToLive(Duration.ofHours(8))
+                        .reuseRefreshTokens(false)
+                        .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
+                        .build())
+                .build();
+
+        registeredClientSecretRepository.save(convert(authorizationCodeSelfContained));
 
         RegisteredClient pkceClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("eazypublicclient")
@@ -78,9 +99,15 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
                 .redirectUri("https://oauth.pstmn.io/v1/callback")
                 .scopes(scopeConfig -> scopeConfig.addAll(List.of(OidcScopes.OPENID, OidcScopes.EMAIL, OidcScopes.PHONE)))
                 .clientSettings(ClientSettings.builder().requireProofKey(true).build())
-                .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .refreshTokenTimeToLive(Duration.ofHours(8)).reuseRefreshTokens(false)
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED).build()).build();
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofMinutes(10))
+                        .refreshTokenTimeToLive(Duration.ofHours(8))
+                        .reuseRefreshTokens(false)
+                        .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
+                        .build())
+                .build();
+
+        registeredClientSecretRepository.save(convert(pkceClient));
 
         RegisteredClient passwordSelfContained = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("passwordSelfContained")
@@ -93,16 +120,135 @@ public class RegisteredClientRepositoryImpl implements org.springframework.secur
                         .accessTokenTimeToLive(Duration.ofMinutes(10))
                         .refreshTokenTimeToLive(Duration.ofHours(8))
                         .reuseRefreshTokens(false)
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
+                        .accessTokenFormat(new OAuth2TokenFormat("self-contained"))
                         .build())
                 .build();
 
-        map.put("clientCredentialsSelfContained", clientCredentialsSelfContained);
-        map.put("clientCredentialsReference", clientCredentialsReference);
-        map.put("authorizationCodeSelfContained", authorizationCodeSelfContained);
-        map.put("eazypublicclient", pkceClient);
-        map.put("passwordSelfContained", passwordSelfContained);
+        registeredClientSecretRepository.save(convert(passwordSelfContained));
+    }
 
-        return map.get(clientId);
+    public RegisteredClient convert(RegisteredClientSecret source) {
+
+        RegisteredClient.Builder builder =
+                RegisteredClient.withId(source.getId())
+                        .clientId(source.getClientId())
+                        .clientName(source.getClientName());
+
+        // ---- timestamps ----
+        if (source.getClientIdIssuedAt() != null) {
+            builder.clientIdIssuedAt(source.getClientIdIssuedAt());
+        }
+
+        if (source.getClientSecret() != null) {
+            builder.clientSecret(source.getClientSecret());
+        }
+
+        if (source.getClientSecretExpiresAt() != null) {
+            builder.clientSecretExpiresAt(source.getClientSecretExpiresAt());
+        }
+
+        // ---- auth methods ----
+        source.getClientAuthenticationMethods()
+                .forEach(v ->
+                        builder.clientAuthenticationMethod(
+                                new ClientAuthenticationMethod(v)));
+
+        // ---- grant types ----
+        source.getAuthorizationGrantTypes()
+                .forEach(v ->
+                        builder.authorizationGrantType(
+                                new AuthorizationGrantType(v)));
+
+        // ---- collections ----
+        builder.redirectUris(uris ->
+                uris.addAll(source.getRedirectUris()));
+
+        builder.postLogoutRedirectUris(uris ->
+                uris.addAll(source.getPostLogoutRedirectUris()));
+
+        builder.scopes(scopes ->
+                scopes.addAll(source.getScopes()));
+
+        // ---- client settings ----
+        builder.clientSettings(
+                ClientSettings.builder()
+                        .requireProofKey(source.isRequireProofKey())
+                        .requireAuthorizationConsent(source.isRequireAuthorizationConsent())
+                        .build()
+        );
+
+        // ---- token settings ----
+        TokenSettings.Builder tokenBuilder = TokenSettings.builder()
+                .accessTokenTimeToLive(
+                        Duration.ofSeconds(source.getAccessTokenTimeToLive()))
+                .reuseRefreshTokens(source.isReuseRefreshTokens())
+                .accessTokenFormat(
+                        new OAuth2TokenFormat(source.getAccessTokenFormat()));
+
+        if (source.getRefreshTokenTimeToLive() > 0) {
+            tokenBuilder.refreshTokenTimeToLive(
+                    Duration.ofSeconds(source.getRefreshTokenTimeToLive()));
+        }
+
+        builder.tokenSettings(tokenBuilder.build());
+
+        return builder.build();
+    }
+
+    public RegisteredClientSecret convert(RegisteredClient source) {
+
+        return RegisteredClientSecret.builder()
+                .id(source.getId())
+                .clientId(source.getClientId())
+                .clientIdIssuedAt(source.getClientIdIssuedAt())
+                .clientSecret(source.getClientSecret())
+                .clientSecretExpiresAt(source.getClientSecretExpiresAt())
+                .clientName(source.getClientName())
+
+                .clientAuthenticationMethods(
+                        source.getClientAuthenticationMethods()
+                                .stream()
+                                .map(ClientAuthenticationMethod::getValue)
+                                .collect(Collectors.toSet())
+                )
+
+                .authorizationGrantTypes(
+                        source.getAuthorizationGrantTypes()
+                                .stream()
+                                .map(AuthorizationGrantType::getValue)
+                                .collect(Collectors.toSet())
+                )
+
+                .redirectUris(source.getRedirectUris())
+                .postLogoutRedirectUris(source.getPostLogoutRedirectUris())
+                .scopes(source.getScopes())
+
+                .requireProofKey(
+                        source.getClientSettings().isRequireProofKey())
+                .requireAuthorizationConsent(
+                        source.getClientSettings().isRequireAuthorizationConsent())
+
+                .accessTokenTimeToLive(
+                        source.getTokenSettings()
+                                .getAccessTokenTimeToLive()
+                                .getSeconds())
+
+                .refreshTokenTimeToLive(
+                        source.getTokenSettings().getRefreshTokenTimeToLive() != null
+                                ? source.getTokenSettings()
+                                .getRefreshTokenTimeToLive()
+                                .getSeconds()
+                                : 0)
+
+                .reuseRefreshTokens(
+                        source.getTokenSettings().isReuseRefreshTokens())
+
+                .accessTokenFormat(
+                        source.getTokenSettings()
+                                .getAccessTokenFormat()
+                                .getValue())
+
+                .updatedAt(Instant.now())
+                .build();
     }
 }
